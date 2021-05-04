@@ -1,5 +1,10 @@
 import styled from "styled-components";
-import { formatUsdc, formatTokenAmount } from "../../utilities/string";
+import {
+  formatUsdc,
+  formatTokenAmount,
+  abbreviateNumber,
+} from "../../utilities/string";
+import BigNumber from "bignumber.js";
 
 const Cell = styled.div`
   width: 200px;
@@ -64,6 +69,12 @@ export default function VaultAssetRow(asset) {
   const underlyingTokenBalance =
     asset.underlyingTokenBalance.amount / 10 ** asset.token.decimals;
   const underlyingTokenBalanceUsdc = asset.underlyingTokenBalance.amountUsdc;
+  const borrowLimitPercentage = new BigNumber(
+    asset.underlyingTokenBalance.amount
+  )
+    .div(asset.metadata.depositLimit)
+    .times(100)
+    .toFixed(2);
   return (
     <Tr key={asset.id}>
       <Td>
@@ -72,10 +83,13 @@ export default function VaultAssetRow(asset) {
           <AssetName>{asset.name}</AssetName>
         </TokenIconAndName>
       </Td>
-      <Td>
-        {formatTokenAmount(underlyingTokenBalance)} {asset.token.symbol}
-      </Td>
+      <Td>{asset.version}</Td>
+      <Td>{borrowLimitPercentage}%</Td>
+      <Td>{formatTokenAmount(underlyingTokenBalance)} </Td>
+      <Td> {asset.token.symbol}</Td>
+      <Td> {formatUsdc(asset.token.priceUsdc)}</Td>
       <Td>{formatUsdc(underlyingTokenBalanceUsdc)}</Td>
+      <Td>{asset.metadata.migrationAvailable ? "Migrate" : ""}</Td>
     </Tr>
   );
 }

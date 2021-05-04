@@ -54,7 +54,6 @@ export default function Adapter({ Component, pageProps }) {
     }
     if (ready) {
       loadAssets(newAdapterName);
-      console.log("doggi", newAdapterName);
     }
   };
 
@@ -65,11 +64,29 @@ export default function Adapter({ Component, pageProps }) {
     setConfig(adapterConfig);
   };
 
+  const loadPrices = async (assetsList) => {
+    const pricesHelperContract = contracts.pricesHelper;
+    const underlyingTokensAddresses = assetsList.map((asset) => asset.tokenId);
+    const tokensPrices = await pricesHelperContract.methods
+      .tokensPrices(underlyingTokensAddresses)
+      .call();
+    const newAssetsList = assetsList.map((asset) => {
+      const underlyingTokenId = asset.token.id;
+      const underlyingTokenPriceUsdc = tokensPrices.find(
+        (token) => token.tokenId === underlyingTokenId
+      ).priceUsdc;
+      asset.token.priceUsdc = underlyingTokenPriceUsdc;
+      return asset;
+    });
+
+    setAssets(newAssetsList);
+  };
+
   const loadAssets = async (_adapterName) => {
     const assetsStaticData = await fetchData(_adapterName, "assetsStatic");
     const assetsDynamicData = await fetchData(_adapterName, "assetsDynamic");
     const assetsMerged = mergeArraysById(assetsStaticData, assetsDynamicData);
-    setAssets(assetsMerged);
+    loadPrices(assetsMerged);
   };
 
   const initialize = async () => {

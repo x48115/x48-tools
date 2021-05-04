@@ -19,7 +19,10 @@ const NavLinks = styled.div`
 `;
 
 export default function Home() {
-  const navItems = contractsConfig.map((config) => {
+  const adapterContracts = contractsConfig.filter(
+    (config) => config.type === "adapter"
+  );
+  const navItems = adapterContracts.map((config) => {
     return (
       <ActiveLink
         key={config.name}
