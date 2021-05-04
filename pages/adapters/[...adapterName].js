@@ -24,7 +24,7 @@ const mergeArraysById = (arr1, arr2) => {
   });
 };
 
-export default function ({ Component, pageProps }) {
+export default function Adapter({ Component, pageProps }) {
   const contracts = useContracts();
   const router = useRouter();
   const [assets, setAssets] = useState([]);
@@ -47,9 +47,14 @@ export default function ({ Component, pageProps }) {
 
   const routerLoaded = () => {
     const adapterNameArr = router.query["adapterName"];
+    let newAdapterName;
     if (adapterNameArr) {
-      const adapterName = adapterNameArr[0];
-      setAdapterName(adapterName);
+      newAdapterName = adapterNameArr[0];
+      setAdapterName(newAdapterName);
+    }
+    if (ready) {
+      loadAssets(newAdapterName);
+      console.log("doggi", newAdapterName);
     }
   };
 
@@ -60,9 +65,9 @@ export default function ({ Component, pageProps }) {
     setConfig(adapterConfig);
   };
 
-  const loadAssets = async () => {
-    const assetsStaticData = await fetchData(adapterName, "assetsStatic");
-    const assetsDynamicData = await fetchData(adapterName, "assetsDynamic");
+  const loadAssets = async (_adapterName) => {
+    const assetsStaticData = await fetchData(_adapterName, "assetsStatic");
+    const assetsDynamicData = await fetchData(_adapterName, "assetsDynamic");
     const assetsMerged = mergeArraysById(assetsStaticData, assetsDynamicData);
     setAssets(assetsMerged);
   };
@@ -71,7 +76,7 @@ export default function ({ Component, pageProps }) {
     if (!ready) {
       return;
     }
-    loadAssets();
+    loadAssets(adapterName);
     setAdapterConfig();
   };
 

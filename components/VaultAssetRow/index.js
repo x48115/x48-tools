@@ -57,8 +57,7 @@ const TokenIconAndName = styled.div`
   align-items: center;
 `;
 
-export default function (asset) {
-  console.log(asset);
+export default function VaultAssetRow(asset) {
   const tokenId = asset.token.id;
   const tokenIconUrl = `https://raw.githubusercontent.com/iearn-finance/yearn-assets/master/icons/tokens/${tokenId}/logo.svg`;
   const tokenIcon = <TokenIcon src={tokenIconUrl} />;

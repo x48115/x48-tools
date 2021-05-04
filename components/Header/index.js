@@ -2,8 +2,10 @@ import Head from "next/head";
 import Image from "next/image";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import contractsConfig from "../../components/ConnectionProvider/contractsConfig";
 
 import ActiveLink from "../ActiveLink";
+import Adapter from "../../pages/adapters/[...adapterName]";
 
 const Wrapper = styled.div``;
 
@@ -17,16 +19,21 @@ const NavLinks = styled.div`
 `;
 
 export default function Home() {
+  const navItems = contractsConfig.map((config) => {
+    return (
+      <ActiveLink
+        key={config.name}
+        href={`/adapters/${config.name}`}
+        activeClassName="active"
+      >
+        <a>{config.alias}</a>
+      </ActiveLink>
+    );
+  });
+
   return (
     <Wrapper>
-      <NavLinks>
-        <ActiveLink href="/" activeClassName="active">
-          <a>Vaults</a>
-        </ActiveLink>
-        <ActiveLink href="/ironbank" activeClassName="active">
-          <a>Iron Bank</a>
-        </ActiveLink>
-      </NavLinks>
+      <NavLinks>{navItems}</NavLinks>
       <hr />
     </Wrapper>
   );
