@@ -1,0 +1,40 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 18px;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color: white;
+  background-color:#272822;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+a:visited {
+  color: white;
+  text-decoration: none;
+}
+
+a, a:hover, a:active, a:visited {
+  color: white;
+  text-decoration: none
+}
+
+a.active {
+  text-decoration: underline;
+}
+
+div.h {
+  display: inline;
+  color: #aa7ef9;
+}
+
+pre {
+  font-size: 14px;
+  margin: 0px;
+  font-family: Menlo, Monaco, 'Courier New', monospace
+}
