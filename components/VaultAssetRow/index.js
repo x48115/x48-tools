@@ -69,27 +69,43 @@ export default function VaultAssetRow(asset) {
   const underlyingTokenBalance =
     asset.underlyingTokenBalance.amount / 10 ** asset.token.decimals;
   const underlyingTokenBalanceUsdc = asset.underlyingTokenBalance.amountUsdc;
+  const underlyingTokenBalanceNormalized = formatTokenAmount(
+    underlyingTokenBalance
+  );
+  const underlyingTokenBalanceNormalizedUsdc = formatUsdc(
+    underlyingTokenBalanceUsdc
+  );
+  const assetVersion = asset.version;
+  const assetTokenSymbol = asset.token.symbol;
+  const migrationAvailable = asset.metadata.migrationAvailable ? "Migrate" : "";
+
   const borrowLimitPercentage = new BigNumber(
     asset.underlyingTokenBalance.amount
   )
     .div(asset.metadata.depositLimit)
     .times(100)
     .toFixed(2);
+
+  const tokenIconAndName = (
+    <TokenIconAndName>
+      {tokenIcon}
+      <AssetName>{asset.name}</AssetName>
+    </TokenIconAndName>
+  );
+
+  const assetPrice = asset.token.priceUsdc
+    ? formatUsdc(asset.token.priceUsdc)
+    : "";
   return (
     <Tr key={asset.id}>
-      <Td>
-        <TokenIconAndName>
-          {tokenIcon}
-          <AssetName>{asset.name}</AssetName>
-        </TokenIconAndName>
-      </Td>
-      <Td>{asset.version}</Td>
+      <Td>{tokenIconAndName}</Td>
+      <Td>{assetVersion}</Td>
       <Td>{borrowLimitPercentage}%</Td>
-      <Td>{formatTokenAmount(underlyingTokenBalance)} </Td>
-      <Td> {asset.token.symbol}</Td>
-      <Td> {formatUsdc(asset.token.priceUsdc)}</Td>
-      <Td>{formatUsdc(underlyingTokenBalanceUsdc)}</Td>
-      <Td>{asset.metadata.migrationAvailable ? "Migrate" : ""}</Td>
+      <Td>{underlyingTokenBalanceNormalized} </Td>
+      <Td>{assetTokenSymbol}</Td>
+      <Td>{assetPrice}</Td>
+      <Td>{underlyingTokenBalanceNormalized}</Td>
+      <Td>{migrationAvailable}</Td>
     </Tr>
   );
 }

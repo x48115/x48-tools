@@ -7,6 +7,8 @@ import { useContracts } from "../../components/ConnectionProvider/hooks";
 import { useEffect, useState } from "react";
 import { sanitizeResponse } from "../../utilities/web3";
 import contractsConfig from "../../components/ConnectionProvider/contractsConfig";
+import { useStore } from "../../components/StoreProvider/hooks";
+import { observer } from "mobx-react";
 
 const Table = styled.table`
   border: 1px solid #ccc;
@@ -24,7 +26,9 @@ const mergeArraysById = (arr1, arr2) => {
   });
 };
 
-export default function Adapter({ Component, pageProps }) {
+const Adapter = (props) => {
+  const store = useStore();
+  const { Component, pageProps } = props;
   const contracts = useContracts();
   const router = useRouter();
   const [assets, setAssets] = useState([]);
@@ -51,9 +55,6 @@ export default function Adapter({ Component, pageProps }) {
     if (adapterNameArr) {
       newAdapterName = adapterNameArr[0];
       setAdapterName(newAdapterName);
-    }
-    if (ready) {
-      loadAssets(newAdapterName);
     }
   };
 
@@ -86,6 +87,7 @@ export default function Adapter({ Component, pageProps }) {
     const assetsStaticData = await fetchData(_adapterName, "assetsStatic");
     const assetsDynamicData = await fetchData(_adapterName, "assetsDynamic");
     const assetsMerged = mergeArraysById(assetsStaticData, assetsDynamicData);
+    setAssets(assetsMerged);
     loadPrices(assetsMerged);
   };
 
@@ -93,6 +95,7 @@ export default function Adapter({ Component, pageProps }) {
     if (!ready) {
       return;
     }
+    console.log("xx", ready);
     loadAssets(adapterName);
     setAdapterConfig();
   };
@@ -105,11 +108,18 @@ export default function Adapter({ Component, pageProps }) {
     return config.assetRow(asset);
   });
 
+  const increase = () => {
+    store.increase();
+  };
   return (
     <div>
+      {store.secondsPassed}
+      <div onClick={increase}>do</div>
       <Table border="1">
         <tbody>{assetsRows}</tbody>
       </Table>
     </div>
   );
-}
+};
+
+export default observer(Adapter);

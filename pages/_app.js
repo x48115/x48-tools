@@ -2,16 +2,19 @@ import "../styles/globals.css";
 import Header from "../components/Header";
 import { useEffect } from "react";
 import ConnectionProvider from "../components/ConnectionProvider";
+import StoreProvider from "../components/StoreProvider";
 function MyApp({ Component, pageProps }) {
   const initialize = () => {
     console.log("welcome");
   };
   useEffect(initialize, []);
   return (
-    <ConnectionProvider>
-      <Header />
-      <Component {...pageProps} />
-    </ConnectionProvider>
+    <StoreProvider>
+      <ConnectionProvider>
+        <Header />
+        <Component {...pageProps} />
+      </ConnectionProvider>
+    </StoreProvider>
   );
 }
 
