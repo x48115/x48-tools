@@ -6,7 +6,8 @@ import storeInstance from "../../stores/store";
 export default function ConnectionProvider({ children }) {
   const [store, setStore] = useState({});
   const initialize = () => {
-    setStore(storeInstance);
+    const newStoreInstance = new storeInstance();
+    setStore(newStoreInstance);
   };
   useEffect(initialize, []);
   return (

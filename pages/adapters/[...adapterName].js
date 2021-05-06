@@ -113,8 +113,6 @@ const Adapter = (props) => {
   };
   return (
     <div>
-      {store.secondsPassed}
-      <div onClick={increase}>do</div>
       <Table border="1">
         <tbody>{assetsRows}</tbody>
       </Table>

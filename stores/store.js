@@ -1,18 +1,13 @@
 import { makeAutoObservable } from "mobx";
 
-class Store {
+export default class Store {
+  secondsPassed = 0;
+
   constructor() {
     makeAutoObservable(this);
-    this.secondsPassed = 5;
   }
 
-  increase() {
+  increase = () => {
     this.secondsPassed += 1;
-  }
-
-  reset() {
-    this.secondsPassed = 0;
-  }
+  };
 }
-
-export default new Store();
