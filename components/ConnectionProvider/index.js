@@ -3,8 +3,7 @@ import ConnectionContext from "./context";
 import Web3 from "web3";
 import contractsConfig from "./contractsConfig";
 
-const provider =
-  "https://eth-mainnet.alchemyapi.io/v2/Fzjec9nubY8kwQ7KyCdW--u3B8swwNSg";
+const provider = "https://vlefbxtyj4.execute-api.us-east-1.amazonaws.com/prod";
 
 export default function ConnectionProvider({ children }) {
   const [web3, setWeb3] = useState(null);
