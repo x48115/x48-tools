@@ -3,7 +3,7 @@ import ConnectionContext from "./context";
 import Web3 from "web3";
 import contractsConfig from "./contractsConfig";
 
-const provider = "https://vlefbxtyj4.execute-api.us-east-1.amazonaws.com/prod";
+const provider = "https://node.yearn.network";
 
 export default function ConnectionProvider({ children }) {
   const [web3, setWeb3] = useState(null);
