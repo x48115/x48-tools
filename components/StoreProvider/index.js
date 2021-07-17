@@ -12,11 +12,8 @@ export default function ConnectionProvider({ children }) {
   useEffect(initialize, []);
 
   const Loading = styled.div`
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    position: absolute;
+    width: 100%;
+    margin-top: 165px;
     display: flex;
     justify-content: center;
     align-items: center;

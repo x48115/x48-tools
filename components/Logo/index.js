@@ -20,7 +20,7 @@ export default function Logo() {
       <pre>
         ________________________/<div className="h">\\\\\_</div>_____/
         <div className="h">\\\/</div>//////<div className="h">\\\_</div>
-        _________________________________________________
+        ___________________________________________________
         <div className="h">\/</div>///<div className="h">\\\</div>
         _________________
       </pre>
