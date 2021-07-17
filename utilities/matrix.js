@@ -71,7 +71,7 @@ export default function runMatrix() {
     if (iter >= nbrLines * 2) {
       clearInterval(interval);
     }
-    iter += 4;
+    iter += 5;
   }
   interval = setInterval(draw, 0); // TODO: why no delay? relying on render-speed is bad x_x.. let's see how this goes. no time :P
 }

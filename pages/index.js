@@ -35,13 +35,13 @@ const Home = () => {
   const redirect = () => {
     console.log("hahaha");
     Router.push("/redis");
-    setTimeout(() => runMatrix(), 300);
+    setTimeout(() => runMatrix(), 100);
   };
   const checkReadyStatus = () => {
     if (ready) {
       store.log("[System] Initialization complete");
       store.log("[System] Redirecting...");
-      setTimeout(redirect, 600);
+      setTimeout(redirect, 300);
     }
   };
 
