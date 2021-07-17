@@ -21,9 +21,7 @@ export default function ConnectionProvider({ children }) {
 
   let content;
   const loadingStore = Object.keys(store).length == 0;
-  if (loadingStore) {
-    content = <Loading>Loading...</Loading>;
-  } else {
+  if (!loadingStore) {
     content = children;
   }
   return (

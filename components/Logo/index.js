@@ -3,7 +3,6 @@ import React from "react";
 
 const Wrapper = styled.div`
   text-align: center;
-  margin-top: 50px;
   color: #555;
   scale: 86%;
 `;

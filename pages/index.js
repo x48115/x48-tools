@@ -10,7 +10,10 @@ import { observer } from "mobx-react";
 import runMatrix from "../utilities/matrix";
 import Router from "next/router";
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  margin-top: 30px;
+`;
+
 const StyledButton = styled(Button)`
   width: 200px;
 `;
