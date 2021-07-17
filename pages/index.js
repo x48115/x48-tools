@@ -23,7 +23,7 @@ const ButtonWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 100px;
+  margin-top: 120px;
 `;
 
 const Home = () => {
