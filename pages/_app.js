@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import { useEffect } from "react";
 import ConnectionProvider from "../components/ConnectionProvider";
 import WebsocketProvider from "../components/WebsocketProvider";
+import Connector from "../components/Connector";
 import StoreProvider from "../components/StoreProvider";
 function MyApp({ Component, pageProps }) {
   const initialize = () => {};
@@ -13,7 +14,9 @@ function MyApp({ Component, pageProps }) {
         <ConnectionProvider>
           <canvas id="matrix" />
           <Header />
-          <Component {...pageProps} />
+          <Connector>
+            <Component {...pageProps} />
+          </Connector>
         </ConnectionProvider>
       </WebsocketProvider>
     </StoreProvider>

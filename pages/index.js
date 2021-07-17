@@ -33,10 +33,10 @@ const Home = () => {
   const ready = store.ready;
 
   const redirect = () => {
-    console.log("hahaha");
     Router.push("/redis");
     setTimeout(() => runMatrix(), 100);
   };
+
   const checkReadyStatus = () => {
     if (ready) {
       store.log("[System] Initialization complete");
