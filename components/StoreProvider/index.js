@@ -10,7 +10,14 @@ export default function ConnectionProvider({ children }) {
     setStore(newStoreInstance);
   };
   useEffect(initialize, []);
+
+  let content;
+  if (Object.keys(store).length == 0) {
+    content = <div>Loading...</div>;
+  } else {
+    content = children;
+  }
   return (
-    <StoreContext.Provider value={{ store }}>{children}</StoreContext.Provider>
+    <StoreContext.Provider value={{ store }}>{content}</StoreContext.Provider>
   );
 }

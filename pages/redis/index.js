@@ -1,19 +1,18 @@
 import React from "react";
 import styled from "styled-components";
-import AuthenticateButton from "../../components/AuthenticateButton";
+import { useStore } from "../../components/StoreProvider/hooks";
+import { observer } from "mobx-react";
 
 const Wrapper = styled.div`
-  display: flex;
+  display: grid;
   justify-content: center;
   margin: 20px 0px;
 `;
 
+const Input = styled.input``;
+
 const Redis = () => {
-  return (
-    <Wrapper>
-      <AuthenticateButton />
-    </Wrapper>
-  );
+  return <Wrapper>test</Wrapper>;
 };
 
-export default Redis;
+export default observer(Redis);

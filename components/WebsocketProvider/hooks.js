@@ -6,6 +6,11 @@ export function useWebsocket() {
   return websocket;
 }
 
+export function useInitializeWebsocket() {
+  const { initialize } = useContext(context);
+  return initialize;
+}
+
 export function useAuthenticated() {
   const { authenticated } = useContext(context);
   return authenticated;

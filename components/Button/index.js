@@ -5,7 +5,7 @@ const Button = styled.button`
   padding: 7px;
   color: #44f1a6;
   border-radius: 5px;
-  background-color: #000;
+  background-color: transparent;
   display: flex;
   justify-content: center;
   > a {

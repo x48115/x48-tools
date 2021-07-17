@@ -3,12 +3,14 @@ import ConnectionContext from "./context";
 import Web3 from "web3";
 import ENS from "ethjs-ens";
 import { shortenAddress } from "../../utilities/address";
+import { useStore } from "../../components/StoreProvider/hooks";
 
 export default function ConnectionProvider({ children }) {
   const [web3, setWeb3] = useState(null);
   const [chain, setChain] = useState("");
   const [account, setAccount] = useState();
   const [displayName, setDisplayName] = useState();
+  const store = useStore();
 
   const updateAccount = async (account) => {
     setAccount(account);
@@ -18,10 +20,14 @@ export default function ConnectionProvider({ children }) {
     });
     const accountEns = await ens.reverse(account).catch(() => {});
     const logInName = accountEns || account;
-    setDisplayName(shortenAddress(logInName));
+    if (logInName) {
+      setDisplayName(shortenAddress(logInName));
+    }
   };
 
   const initialize = () => {
+    store.log("[Web3] Connecting...");
+    ethereum.request({ method: "eth_requestAccounts" });
     const web3Instance = new Web3(Web3.givenProvider);
     setWeb3(web3Instance);
     setAccount(ethereum.selectedAddress);
@@ -38,7 +44,14 @@ export default function ConnectionProvider({ children }) {
     });
   };
 
-  useEffect(initialize, []);
+  const setConnectionStatus = () => {
+    if (displayName) {
+      store.log(`[Web3] Connected: ${displayName}`);
+      store.setWeb3Connected(true);
+    }
+  };
+
+  useEffect(setConnectionStatus, [displayName]);
 
   return (
     <ConnectionContext.Provider
@@ -47,6 +60,7 @@ export default function ConnectionProvider({ children }) {
         chain,
         account,
         displayName,
+        initialize,
       }}
     >
       {children}

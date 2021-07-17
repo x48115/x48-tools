@@ -11,6 +11,7 @@ function MyApp({ Component, pageProps }) {
     <StoreProvider>
       <WebsocketProvider>
         <ConnectionProvider>
+          <canvas id="matrix" />
           <Header />
           <Component {...pageProps} />
         </ConnectionProvider>

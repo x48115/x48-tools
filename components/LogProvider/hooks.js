@@ -20,8 +20,3 @@ export function useDisplayName() {
   const { displayName } = useContext(context);
   return displayName;
 }
-
-export function useInitializeWeb3() {
-  const { initialize } = useContext(context);
-  return initialize;
-}

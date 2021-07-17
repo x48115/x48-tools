@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import ActiveLink from "../ActiveLink";
 import { useDisplayName } from "../../components/ConnectionProvider/hooks";
+import { useRouter } from "next/router";
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: ${(props) => (props.rootPage ? "none" : "inherit")};
+`;
 
 const NavLinks = styled.div`
   display: grid;
@@ -28,8 +31,11 @@ const Account = styled.div`
 
 export default function Header() {
   const displayName = useDisplayName();
+  const { asPath } = useRouter();
+  const rootPage = asPath == "/";
+
   return (
-    <Wrapper>
+    <Wrapper rootPage={rootPage}>
       <NavLinks>
         <ActiveLink href={`/gnosis`} activeClassName="active">
           Gnosis

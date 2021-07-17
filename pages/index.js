@@ -1,95 +1,69 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Logo from "../components/Logo";
+import Button from "../components/Button";
+import Logs from "../components/Logs";
+import { useInitializeWebsocket } from "../components/WebsocketProvider/hooks";
+import { useInitializeWeb3 } from "../components/ConnectionProvider/hooks";
+import { useStore } from "../components/StoreProvider/hooks";
+import { observer } from "mobx-react";
+import runMatrix from "../utilities/matrix";
+import Router from "next/router";
 
-const v2RegistryAdapterAddress = "0xE75E51566C5761896528B4698a88C92A54B3C954";
-const Logo = styled.div`
-  text-align: center;
-  margin-top: 170px;
-  color: #e6db74;
+const Wrapper = styled.div``;
+const StyledButton = styled(Button)`
+  width: 200px;
 `;
 
-export default function Home() {
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 100px;
+`;
+
+const Home = () => {
+  const [connecting, setConnecting] = useState(false);
+  let content;
+  const store = useStore();
+
+  const initializeWebsocket = useInitializeWebsocket();
+  const initializeWeb3 = useInitializeWeb3();
+  const ready = store.ready;
+
+  const redirect = () => {
+    console.log("hahaha");
+    Router.push("/redis");
+    setTimeout(() => runMatrix(), 300);
+  };
+  const checkReadyStatus = () => {
+    if (ready) {
+      store.log("[System] Initialization complete");
+      store.log("[System] Redirecting...");
+      setTimeout(redirect, 600);
+    }
+  };
+
+  useEffect(checkReadyStatus, [ready]);
+
+  const connect = () => {
+    setConnecting(true);
+    store.log("[System] Initializing...");
+    initializeWebsocket();
+    initializeWeb3();
+  };
+  if (connecting) {
+    content = <Logs />;
+  } else {
+    content = <StyledButton onClick={() => connect()}>Connect</StyledButton>;
+  }
   return (
-    <Logo>
-      <pre>
-        __________________________/<div className="h">\\\_</div>_______/
-        <div className="h">\\\\\\\\\_</div>
-        ____________________________________________________/
-        <div className="h">\\\\\\</div>_________________
-      </pre>
-      <pre>
-        ________________________/<div className="h">\\\\\_</div>_____/
-        <div className="h">\\\/</div>//////<div className="h">\\\_</div>
-        _________________________________________________
-        <div className="h">\/</div>///<div className="h">\\\</div>
-        _________________
-      </pre>
-      <pre>
-        ______________________/<div className="h">\\\/\\\_</div>____
-        <div className="h">\/\\\_</div>____<div className="h">\/\\\_</div>
-        ___________/<div className="h">\\\</div>
-        _____________________________________<div className="h">\/\\\</div>
-        _________________
-      </pre>
-      <pre>
-        __/<div className="h">\\\_</div>___/<div className="h">\\\_</div>_____/
-        <div className="h">\\\/\/\\\_</div>____
-        <div className="h">\///\\\\\\\\\/</div>__________/
-        <div className="h">\\\\\\\\\\\_</div>____/
-        <div className="h">\\\\\_</div>_______<div className="h">/\\\\\_</div>
-        ______<div className="h">\/\\\</div>_____/
-        <div className="h">\\\\\\\\\\</div>_
-      </pre>
-      <pre>
-        _<div className="h">\/</div>//<div className="h">\\\/\\\/</div>_____/
-        <div className="h">\\\/</div>__<div className="h">\/\\\_</div>_____/
-        <div className="h">\\\/</div>//////<div className="h">\\\_</div>_______
-        <div className="h">\/</div>///<div className="h">\\\/</div>///____/
-        <div className="h">\\\/</div>//<div className="h">\\\_</div>___/
-        <div className="h">\\\/</div>//<div className="h">\\\_</div>____
-        <div className="h">\/\\\</div>____<div className="h">\/\\\/</div>/////__
-      </pre>
-      <pre>
-        ___<div className="h">\/</div>//<div className="h">\\\/</div>_____/
-        <div className="h">\\\\\\\\\\\\\\\\</div>__/
-        <div className="h">\\\_</div>_____<div className="h">\/</div>/
-        <div className="h">\\\_</div>_________<div className="h">\/\\\_</div>
-        ______/<div className="h">\\\_</div>_<div className="h">\/</div>/
-        <div className="h">\\\_</div>_/<div className="h">\\\_</div>_
-        <div className="h">\/</div>/<div className="h">\\\_</div>___
-        <div className="h">\/\\\</div>____<div className="h">\/\\\\\\\\\\</div>_
-      </pre>
-      <pre>
-        ____/<div className="h">\\\/\\\_</div>__<div className="h">\/</div>
-        //////////<div className="h">\\\/</div>/__<div className="h">\/</div>/
-        <div className="h">\\\_</div>_____/<div className="h">\\\_</div>
-        __________<div className="h">\/\\\_</div>/<div className="h">\\</div>__
-        <div className="h">\/</div>/<div className="h">\\\_</div>_/
-        <div className="h">\\\_</div>_<div className="h">\/</div>/
-        <div className="h">\\\_</div>_/<div className="h">\\\_</div>____
-        <div className="h">\/\\\</div>____<div className="h">\/</div>///////
-        <div className="h">\\\</div>_
-      </pre>
-      <pre>
-        __/<div className="h">\\\/\/</div>//<div className="h">\\\_</div>
-        __________<div className="h">\/\\\_</div>____<div className="h">\/</div>
-        //<div className="h">\\\\\\\\\/</div>____/<div className="h">\\\_</div>
-        ___<div className="h">\/</div>/<div className="h">\\\\\_</div>___
-        <div className="h">\/</div>//<div className="h">\\\\\/</div>____
-        <div className="h">\/</div>//<div className="h">\\\\\/_</div>___
-        <div className="h">/\\\\\\\\\</div>__/
-        <div className="h">\\\\\\\\\\</div>_
-      </pre>
-      <pre>
-        _<div className="h">\/</div>//____<div className="h">\/</div>
-        //____________<div className="h">\/</div>//________
-        <div className="h">\/</div>////////_____<div className="h">\/</div>
-        //______<div className="h">\/</div>////_______
-        <div className="h">\/</div>////________<div className="h">\/</div>
-        ////_____<div className="h">\/</div>////////__
-        <div className="h">\/</div>/////////__
-      </pre>
-    </Logo>
+    <Wrapper>
+      <Logo />
+      <ButtonWrapper>{content}</ButtonWrapper>
+    </Wrapper>
   );
-}
+};
+
+export default observer(Home);
