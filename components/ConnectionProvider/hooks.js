@@ -6,7 +6,17 @@ export function useWeb3() {
   return web3;
 }
 
-export function useContracts() {
-  const { contracts } = useContext(context);
-  return contracts;
+export function useWeb3Read() {
+  const { web3Read } = useContext(context);
+  return web3Read;
+}
+
+export function useAccount() {
+  const { account } = useContext(context);
+  return account;
+}
+
+export function useDisplayName() {
+  const { displayName } = useContext(context);
+  return displayName;
 }

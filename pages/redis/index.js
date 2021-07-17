@@ -1,10 +1,20 @@
-import Head from "next/head";
-import Image from "next/image";
+import React from "react";
 import styled from "styled-components";
-import Link from "next/link";
+import AuthenticateButton from "../../components/AuthenticateButton";
+import Button from "../../components/Button";
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 20px 0px;
+`;
 
-export default function Adapters() {
-  return <Wrapper>Redis</Wrapper>;
-}
+const Redis = () => {
+  return (
+    <Wrapper>
+      <AuthenticateButton />
+    </Wrapper>
+  );
+};
+
+export default Redis;
