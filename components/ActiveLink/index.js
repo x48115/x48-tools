@@ -1,23 +1,39 @@
 import { useRouter } from "next/router";
-import PropTypes from "prop-types";
 import Link from "next/link";
 import React, { Children } from "react";
+import styled from "styled-components";
 
 const ActiveLink = ({ children, activeClassName, ...props }) => {
   const { asPath } = useRouter();
-  const child = Children.only(children);
-  const childClassName = child.props.className || "";
+
+  const Wrapper = styled.div`
+    border: 2px solid #44f1a6;
+    padding: 7px;
+    color: #44f1a6;
+    border-radius: 5px;
+    > a {
+      color: #44f1a6;
+    }
+    &:hover {
+      color: #000;
+      background-color: #44f1a6;
+    }
+    &.active {
+      color: #000;
+      background-color: #44f1a6;
+    }
+  `;
 
   const className =
     asPath === props.href || asPath === props.as
-      ? `${childClassName} ${activeClassName}`.trim()
-      : childClassName;
+      ? `${props.className} ${activeClassName}`.trim()
+      : props.className;
 
   return (
-    <Link {...props}>
-      {React.cloneElement(child, {
-        className: className || null,
-      })}
+    <Link href={props.href}>
+      <a>
+        <Wrapper className={className}>{children}</Wrapper>
+      </a>
     </Link>
   );
 };
