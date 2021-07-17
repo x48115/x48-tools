@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import StoreContext from "./context";
-import Web3 from "web3";
+import styled from "styled-components";
 import storeInstance from "../../stores/store";
 
 export default function ConnectionProvider({ children }) {
@@ -11,9 +11,21 @@ export default function ConnectionProvider({ children }) {
   };
   useEffect(initialize, []);
 
+  const Loading = styled.div`
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  `;
+
   let content;
-  if (Object.keys(store).length == 0) {
-    content = <div>Loading...</div>;
+  const loadingStore = Object.keys(store).length == 0;
+  if (loadingStore) {
+    content = <Loading>Loading...</Loading>;
   } else {
     content = children;
   }
