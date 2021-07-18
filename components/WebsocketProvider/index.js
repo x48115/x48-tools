@@ -66,7 +66,6 @@ export default function WebsocketProvider({ children }) {
     };
 
     wss.sendMessage = (message) => {
-      message.timestamp = Date.now();
       const jsonMessage = JSON.stringify(message);
       store.websocketLog(jsonMessage);
       wss.send(jsonMessage);
