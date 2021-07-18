@@ -14,6 +14,7 @@ export default function ConnectionProvider({ children }) {
 
   const updateAccount = async (account) => {
     setAccount(account);
+    console.log("acct", account);
     const ens = new ENS({
       provider: window.web3.currentProvider,
       network: 1,

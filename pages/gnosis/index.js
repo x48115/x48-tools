@@ -3,8 +3,10 @@ import Image from "next/image";
 import styled from "styled-components";
 import Link from "next/link";
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  margin-top: 100px;
+`;
 
 export default function Adapters() {
-  return <Wrapper>gnosis</Wrapper>;
+  return <Wrapper>Not yet...</Wrapper>;
 }

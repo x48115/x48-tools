@@ -1,10 +1,21 @@
 import styled from "styled-components";
 import ActiveLink from "../ActiveLink";
 import { useDisplayName } from "../../components/ConnectionProvider/hooks";
+import { useStore } from "../../components/StoreProvider/hooks";
 import { useRouter } from "next/router";
+import { observer } from "mobx-react";
 
 const Wrapper = styled.div`
   display: ${(props) => (props.rootPage ? "none" : "inherit")};
+  border-bottom: 1px solid #44f1a6;
+`;
+
+const BlockNumber = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  left: 30px;
+  height: 59px;
 `;
 
 const NavLinks = styled.div`
@@ -12,13 +23,7 @@ const NavLinks = styled.div`
   grid-auto-flow: column;
   justify-content: center;
   align-items: center;
-  margin: 12px auto;
   grid-gap: 12px;
-`;
-
-const Line = styled.div`
-  width: 100%;
-  border-top: 1px solid #44f1a6;
 `;
 
 const Account = styled.div`
@@ -26,17 +31,27 @@ const Account = styled.div`
   display: flex;
   align-items: center;
   right: 30px;
-  height: 100%;
+  height: 59px;
 `;
 
-export default function Header() {
+const BlockText = styled.div`
+  user-select: none;
+`;
+
+export default observer(function Header() {
   const displayName = useDisplayName();
   const { asPath } = useRouter();
   const rootPage = asPath == "/";
+  const store = useStore();
 
   return (
     <Wrapper rootPage={rootPage}>
       <NavLinks>
+        <BlockNumber>
+          <BlockText>Block:&nbsp;</BlockText>
+          {store.blockNumber.toLocaleString("en-US")} (
+          {store.lastBlockTimestampDelta} seconds ago)
+        </BlockNumber>
         <ActiveLink href={`/gnosis`} activeClassName="active">
           Gnosis
         </ActiveLink>
@@ -45,7 +60,6 @@ export default function Header() {
         </ActiveLink>
         <Account>{displayName}</Account>
       </NavLinks>
-      <Line />
     </Wrapper>
   );
-}
+});

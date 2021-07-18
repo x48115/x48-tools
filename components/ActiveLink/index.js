@@ -5,9 +5,8 @@ import Button from "../Button";
 
 const ActiveLink = ({ children, activeClassName, ...props }) => {
   const { asPath } = useRouter();
-
   const className =
-    asPath === props.href || asPath === props.as
+    asPath.startsWith(props.href) || asPath === props.as
       ? `${props.className} ${activeClassName}`.trim()
       : props.className;
 

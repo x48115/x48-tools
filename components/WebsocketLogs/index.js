@@ -7,14 +7,13 @@ const Log = styled.div``;
 
 const Wrapper = styled.div`
   color: #44f1a6;
-  width: 550px;
 `;
 
 const renderLog = (log, idx) => <Log key={idx}>{log}</Log>;
 
 const Logs = ({ className }) => {
   const store = useStore();
-  const logs = store.logs && store.logs.map(renderLog);
+  const logs = store.websocketLogs && store.websocketLogs.map(renderLog);
   return <Wrapper className={className}>{logs}</Wrapper>;
 };
 

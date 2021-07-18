@@ -36,13 +36,12 @@ const Home = () => {
   const ready = store.ready;
 
   const redirect = () => {
+    setTimeout(() => runMatrix(), 300);
     Router.push("/redis");
-    setTimeout(() => runMatrix(), 100);
   };
 
   const checkReadyStatus = () => {
     if (ready) {
-      store.log("[System] Initialization complete");
       store.log("[System] Redirecting...");
       setTimeout(redirect, 300);
     }

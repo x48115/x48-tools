@@ -3,10 +3,12 @@ import WebsocketContext from "./context";
 import { useStore } from "../../components/StoreProvider/hooks";
 
 export default function WebsocketProvider({ children }) {
-  const [websocket, setWebsocket] = useState(null);
   const [authenticated, setAuthenticated] = useState(false);
-
   const store = useStore();
+
+  const requestSubscriptionTopics = {
+    action: "requestSubscriptionTopics",
+  };
 
   const initialize = () => {
     const url = "ws://localhost:8080";
@@ -15,26 +17,66 @@ export default function WebsocketProvider({ children }) {
     store.log(`[Websocket] Connecting to ${url}...`);
     wss.onopen = () => {
       store.log("[Websocket] Connected");
+      wss.sendMessage(requestSubscriptionTopics);
+      wss.connected = true;
       store.setWebsocketConnected(true);
     };
 
     wss.onmessage = (message) => {
       const { data } = message;
       const parsedData = JSON.parse(data);
-      const { action } = parsedData;
-      if (action === "authenticate") {
-        if (parsedData.payload && parsedData.payload.address) {
-          setAuthenticated(true);
-        }
+      const { action, topic, payload } = parsedData;
+      switch (action) {
+        case "authenticate":
+          if (parsedData.payload && parsedData.payload.address) {
+            setAuthenticated(true);
+          }
+          break;
+        case "subscriptionTopics":
+          store.setSubscriptionTopics(parsedData.payload);
       }
-      console.log(parsedData);
+
+      let blockNumber;
+      if (topic == "blockNumber") {
+        blockNumber = payload.blockNumber;
+        store.setCurrentBlockNumber(blockNumber);
+      }
+
+      const hideMessage = blockNumber && store.currentTopic != "blockNumber";
+      if (!hideMessage) {
+        store.websocketLog(JSON.stringify(parsedData));
+      }
     };
 
-    setWebsocket(wss);
+    wss.subscribe = (topic) => {
+      wss.sendMessage({
+        action: "subscribe",
+        topic,
+      });
+    };
+
+    wss.unsubscribe = (topic) => {
+      if (topic == "blockNumber") {
+        return;
+      }
+      wss.sendMessage({
+        action: "unsubscribe",
+        topic,
+      });
+    };
+
+    wss.sendMessage = (message) => {
+      message.timestamp = Date.now();
+      const jsonMessage = JSON.stringify(message);
+      store.websocketLog(jsonMessage);
+      wss.send(jsonMessage);
+    };
+
+    store.setWebsocket(wss);
   };
 
   return (
-    <WebsocketContext.Provider value={{ websocket, initialize, authenticated }}>
+    <WebsocketContext.Provider value={{ initialize, authenticated }}>
       {children}
     </WebsocketContext.Provider>
   );

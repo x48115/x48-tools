@@ -9,8 +9,9 @@ import { useInitializeWeb3 } from "../../components/ConnectionProvider/hooks";
 
 const Wrapper = styled.div`
   color: #44f1a6;
+  height: 100%;
+  width: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   margin-top: ${(props) => (props.rootPage || props.ready ? "0px" : "100px")};
@@ -26,11 +27,10 @@ const Connector = (props) => {
 
   const initialize = () => {
     if (!ready && !rootPage) {
-      store.log("[System] Initialization complete");
       initializeWebsocket();
       initializeWeb3();
     }
-    if (ready) {
+    if (ready && !rootPage) {
       store.log("[System] Initialization complete");
     }
   };

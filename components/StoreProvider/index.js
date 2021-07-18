@@ -8,6 +8,7 @@ export default function ConnectionProvider({ children }) {
   const initialize = () => {
     const newStoreInstance = new storeInstance();
     setStore(newStoreInstance);
+    newStoreInstance.startUpdatingTimestamp();
   };
   useEffect(initialize, []);
 
