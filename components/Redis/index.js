@@ -48,7 +48,9 @@ const Redis = () => {
     let subscriptionTopic;
     if (nothingSelected) {
       subscriptionTopic = store.subscriptionTopics[0];
-      Router.push("/redis", `/redis/${subscriptionTopic}`, { shallow: true });
+      if (subscriptionTopic) {
+        Router.push("/redis", `/redis/${subscriptionTopic}`, { shallow: true });
+      }
     } else {
       subscriptionTopic = selectedTopic;
     }
@@ -60,7 +62,7 @@ const Redis = () => {
       websocket.subscribe(subscriptionTopic);
     }
   };
-  useEffect(initialize, [websocketConnected]);
+  useEffect(initialize, [store.subscriptionTopics]);
   return (
     <HorizontalWrapper>
       <SubscriptionPane />
