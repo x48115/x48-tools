@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
   overflow: scroll;
-  scroll-behavior: ${(props) => (props.smoothScroll ? "smooth" : "inherit")};
+  scroll-behavior: smooth;
 `;
 
 function SubscriptionContent() {
@@ -44,11 +44,7 @@ function SubscriptionContent() {
     }
   }, [logs]);
 
-  return (
-    <Wrapper smoothScroll={!pendingTransactions} id="log-window">
-      {logs}
-    </Wrapper>
-  );
+  return <Wrapper id="log-window">{logs}</Wrapper>;
 }
 
 export default observer(SubscriptionContent);

@@ -42,7 +42,9 @@ export default function WebsocketProvider({ children }) {
         store.setCurrentBlockNumber(blockNumber);
       }
 
-      const hideMessage = blockNumber && store.currentTopic != "blockNumber";
+      const hideMessage =
+        (blockNumber && store.currentTopic != "blockNumber") ||
+        parsedData.topic !== store.currentTopic;
       if (!hideMessage) {
         store.websocketLog(JSON.stringify(parsedData));
       }

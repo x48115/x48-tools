@@ -9,7 +9,7 @@ export default class Store {
   subscriptionTopics = [];
   currentTopic;
   blockNumber = 0;
-  lastBlockTimestamp = 0;
+  lastBlockTimestamp = Date.now();
   currentTimestamp = Date.now();
   lastBlockTimestampDelta = 0;
 
@@ -31,12 +31,12 @@ export default class Store {
     this.checkSystemReady();
   };
 
-  setCurrentTopic = (topic) => {
+  setCurrentTopic = action((topic) => {
     this.currentTopic = topic;
+    this.websocketLogs = [];
     if (this.currentTopic == "pendingTransactions") {
-      this.websocketLogs = [];
     }
-  };
+  });
 
   setSubscriptionTopics = (subscriptionTopics) => {
     this.subscriptionTopics = subscriptionTopics;
@@ -69,11 +69,25 @@ export default class Store {
     this.logs.push(message);
   };
 
-  websocketLog = (message) => {
-    const queueLength = 30;
+  clearWebsocketLogs = action(() => {
+    this.websocketLogs = [];
+  });
+
+  websocketLog = action((message) => {
+    let queueLength;
+    switch (this.currentTopic) {
+      case "transactionReceipts":
+        queueLength = 3;
+        break;
+      case "pendingTransactions":
+        queueLength = 11;
+        break;
+      default:
+        queueLength = 10;
+    }
     if (this.websocketLogs.length >= queueLength) {
       this.websocketLogs.shift();
     }
     this.websocketLogs.push(message);
-  };
+  });
 }

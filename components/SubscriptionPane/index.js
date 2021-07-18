@@ -30,10 +30,11 @@ export default observer(() => {
 
   const selectTopic = (subscriptionTopic) => {
     if (selectedTopic != subscriptionTopic) {
-      if (store.currentTopic) {
-        store.websocket.unsubscribe(store.currentTopic);
-      }
+      const previousTopic = store.currentTopic;
       store.setCurrentTopic(subscriptionTopic);
+      if (previousTopic) {
+        store.websocket.unsubscribe(previousTopic);
+      }
       store.websocket.subscribe(subscriptionTopic);
       Router.push("/redis", `/redis/${subscriptionTopic}`, { shallow: true });
     }
