@@ -11,7 +11,7 @@ export default function WebsocketProvider({ children }) {
   };
 
   const initialize = () => {
-    const url = "ws://localhost:8080";
+    const url = "wss://firehose.yearn.network";
     const wss = new WebSocket(url);
     wss.connected = false;
     store.log(`[Websocket] Connecting to ${url}...`);
