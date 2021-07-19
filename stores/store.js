@@ -48,15 +48,15 @@ export default class Store {
   };
 
   startUpdatingTimestamp = () => {
-    setInterval(
+    setInterval(() => {
       action(() => {
         this.currentTimestamp = Date.now();
         this.lastBlockTimestampDelta = (
           (this.currentTimestamp - this.lastBlockTimestamp) /
           1000
-        ).toFixed(2);
-      }, 50)
-    );
+        ).toFixed(0);
+      })();
+    }, 500);
   };
 
   checkSystemReady = () => {

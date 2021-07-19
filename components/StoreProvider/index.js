@@ -3,6 +3,14 @@ import StoreContext from "./context";
 import styled from "styled-components";
 import storeInstance from "../../stores/store";
 
+const Loading = styled.div`
+  width: 100%;
+  margin-top: 165px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 export default function ConnectionProvider({ children }) {
   const [store, setStore] = useState({});
   const initialize = () => {
@@ -11,14 +19,6 @@ export default function ConnectionProvider({ children }) {
     newStoreInstance.startUpdatingTimestamp();
   };
   useEffect(initialize, []);
-
-  const Loading = styled.div`
-    width: 100%;
-    margin-top: 165px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  `;
 
   let content;
   const loadingStore = Object.keys(store).length == 0;
