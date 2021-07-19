@@ -57,8 +57,8 @@ export default observer(function Header() {
         <ActiveLink href={`/gnosis`} activeClassName="active">
           Gnosis
         </ActiveLink>
-        <ActiveLink href={`/redis`} activeClassName="active">
-          Redis
+        <ActiveLink href={`/firehose`} activeClassName="active">
+          Firehose
         </ActiveLink>
         <Account>{displayName}</Account>
       </NavLinks>

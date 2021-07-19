@@ -1,0 +1,28 @@
+[
+  {
+    "root": "firehose",
+    "children": [
+      "transactionReceipts",
+      "contracts",
+      "gasPrice",
+      "blockNumber",
+      "pendingTransactions"
+    ]
+  },
+  {
+    "root": "notifications",
+    "children": [
+      "all",
+      "contracts",
+      "events",
+      "simulations",
+      "infrastructure",
+      "website",
+      "reminders",
+      "gnosis"
+    ]
+  },
+  { "root": "infrastructure", "children": ["nodes", "redis"] },
+  { "root": "simulations", "children": ["harvest"] },
+  { "root": "gnosis", "children": ["submit", "queue"] }
+]

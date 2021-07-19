@@ -37,7 +37,7 @@ const Home = () => {
 
   const redirect = () => {
     setTimeout(() => runMatrix(), 150);
-    Router.push("/redis");
+    Router.push("/firehose");
   };
 
   const checkReadyStatus = () => {

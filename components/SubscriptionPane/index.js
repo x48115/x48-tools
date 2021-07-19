@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import Router from "next/router";
 import { useStore } from "../../components/StoreProvider/hooks";
 import { observer } from "mobx-react";
+import menuItems from "./menu.json";
 
 const Wrapper = styled.div`
   border-right: 1px solid #44f1a6;
@@ -67,74 +68,36 @@ const Arrow = styled.div`
 export default observer(() => {
   const store = useStore();
   const { asPath } = useRouter();
-  const selectedTopic = asPath.replace("/redis/", "");
-  const [menuState, setMenuState] = useState({});
-  const [selectedItemIdx, setSelectedItemIdx] = useState(-1);
+  const pathParts = asPath.split("/");
+  pathParts.shift();
+  const pathRoot = pathParts[0];
+  const selectedTopic = pathParts[1];
 
-  const menuItems = [
-    {
-      root: "firehose",
-      children: [
-        "transactionReceipts",
-        "contracts",
-        "gasPrice",
-        "blockNumber",
-        "logs",
-      ],
-    },
-    {
-      root: "notifications",
-      children: [
-        "all",
-        "contracts",
-        "events",
-        "simulations",
-        "infrastructure",
-        "website",
-        "reminders",
-        "gnosis",
-      ],
-    },
-    { root: "infrastructure", children: ["nodes", "redis"] },
-    { root: "simulations", children: ["harvest"] },
-    { root: "gnosis", children: ["submit", "queue"] },
-  ];
-
-  const selectTopic = (subscriptionTopic) => {
-    if (selectedTopic != subscriptionTopic) {
-      const previousTopic = store.currentTopic;
-      store.setCurrentTopic(subscriptionTopic);
-      if (previousTopic) {
-        store.websocket.unsubscribe(previousTopic);
-      }
-      store.websocket.subscribe(subscriptionTopic);
-      Router.push("/redis", `/redis/${subscriptionTopic}`, { shallow: true });
-    }
+  const initializeMenu = () => {
+    store.setMenuSelection(pathRoot, selectedTopic);
   };
+  useEffect(initializeMenu, []);
 
   const selectChild = (root, child, itemIdx) => {
-    setSelectedItemIdx(itemIdx);
-    console.log(root, child, itemIdx);
+    store.setMenuSelection(root, child);
+    Router.push(`/${root}`, `/${root}/${child}`, { shallow: true });
+    store.setCurrentTopic(root, child);
   };
 
-  const selectParent = (toggleState, itemIdx) => {
-    setMenuState(toggleState);
-    setSelectedItemIdx(itemIdx);
-    console.log(itemIdx);
+  const selectParent = (root, itemIdx) => {
+    store.toggleMenuState(root);
+    store.setMenuSelection(root);
   };
 
   const renderMenu = () => {
     let itemIdx = 0;
     const menu = menuItems.map(({ root, children }, parentIdx) => {
-      const toggleState = JSON.parse(JSON.stringify(menuState));
-      toggleState[root] = !menuState[root];
-
       // Render children
       const renderChildren = () =>
         children.map((child, childIdx) => {
           itemIdx++;
           const dereferencedIdx = itemIdx.valueOf();
-          const selected = dereferencedIdx == selectedItemIdx;
+          const selected = dereferencedIdx == store.selectedMenuIdx;
           const childItem = (
             <Topic
               className="child"
@@ -151,15 +114,15 @@ export default observer(() => {
 
       // Render parents
       const dereferencedIdx = itemIdx.valueOf();
-      const selected = dereferencedIdx == selectedItemIdx;
-      const expanded = menuState[root];
+      const selected = dereferencedIdx == store.selectedMenuIdx;
+      const expanded = store.menuState[root];
       const rootItem = (
         <RootItem key={parentIdx}>
           <Topic
             className="root"
             selected={selected}
             expanded={expanded}
-            onClick={() => selectParent(toggleState, dereferencedIdx)}
+            onClick={() => selectParent(root, dereferencedIdx)}
           >
             <Arrow expanded={expanded}>▶</Arrow>
             <RootName>{root}</RootName>

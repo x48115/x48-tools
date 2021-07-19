@@ -1,10 +1,13 @@
+import Router from "next/router";
 import { action, makeAutoObservable } from "mobx";
+import menuItems from "../components/subscriptionPane/menu.json";
 export default class Store {
   logs = [];
   websocketLogs = [];
   web3Connected = false;
   websocketConnected = false;
   ready = false;
+  menuState = JSON.parse(localStorage.getItem("menuState")) || {};
   websocket;
   subscriptionTopics = [];
   currentTopic;
@@ -12,6 +15,7 @@ export default class Store {
   lastBlockTimestamp = Date.now();
   currentTimestamp = Date.now();
   lastBlockTimestampDelta = 0;
+  selectedMenuIdx = -1;
 
   constructor() {
     makeAutoObservable(this);
@@ -26,15 +30,55 @@ export default class Store {
     this.websocket = websocket;
   };
 
+  setMenuSelection = action((root, child) => {
+    let idx = 0;
+    let returnIdx = -1;
+    menuItems.forEach((rootItem, rootIdx) => {
+      const rootMatch = rootItem.root === root;
+      if (rootMatch && !child) {
+        returnIdx = idx;
+        return false;
+      }
+      rootItem.children.forEach((childItem, childIdx) => {
+        const childMatch = childItem === child;
+        if (rootMatch && childMatch) {
+          returnIdx = idx + 1;
+          const parentClosed = this.menuState[rootItem] !== true;
+          console.log(
+            "rootsies1",
+            parentClosed,
+            this.menuState[rootItem],
+            rootItem
+          );
+          if (true) {
+            this.setMenuState(rootItem.root, true);
+          }
+          return false;
+        }
+        idx++;
+      });
+      idx++;
+    });
+    this.selectedMenuIdx = returnIdx;
+  });
+
   setWebsocketConnected = (status) => {
     this.websocketConnected = true;
     this.checkSystemReady();
   };
 
-  setCurrentTopic = action((topic) => {
-    this.currentTopic = topic;
-    this.websocketLogs = [];
-    if (this.currentTopic == "pendingTransactions") {
+  setCurrentTopic = action((root, subscriptionTopic) => {
+    if (this.currentTopic != subscriptionTopic) {
+      const previousTopic = this.currentTopic;
+      this.currentTopic = subscriptionTopic;
+      this.websocketLogs = [];
+      if (this.currentTopic == "pendingTransactions") {
+      }
+      if (previousTopic) {
+        this.websocket.unsubscribe(previousTopic);
+      }
+      this.websocket.subscribe(subscriptionTopic);
+      Router.push(`/${root}`, `/${root}/${subscriptionTopic}`);
     }
   });
 
@@ -46,6 +90,15 @@ export default class Store {
     this.blockNumber = blockNumber;
     this.lastBlockTimestamp = Date.now();
   };
+
+  toggleMenuState = action((key) => {
+    this.setMenuState(key, !this.menuState[key]);
+  });
+
+  setMenuState = action((key, val) => {
+    this.menuState[key] = val;
+    localStorage.setItem("menuState", JSON.stringify(this.menuState));
+  });
 
   startUpdatingTimestamp = () => {
     setInterval(() => {

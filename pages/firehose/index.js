@@ -1,8 +1,8 @@
 import React from "react";
-import Redis from "../../components/Redis";
+import Firehose from "../../components/Firehose";
 
 const Index = () => {
-  return <Redis />;
+  return <Firehose />;
 };
 
 export default Index;

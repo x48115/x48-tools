@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import { useEffect } from "react";
 import ConnectionProvider from "../components/ConnectionProvider";
 import WebsocketProvider from "../components/WebsocketProvider";
-import Layout from "../components/Layout";
+import LayoutVerticalSplit from "../components/LayoutVerticalSplit";
 import Connector from "../components/Connector";
 import StoreProvider from "../components/StoreProvider";
 
@@ -15,12 +15,12 @@ function MyApp({ Component, pageProps }) {
       <WebsocketProvider>
         <ConnectionProvider>
           <canvas id="matrix" />
-          <Layout>
+          <LayoutVerticalSplit>
             <Header />
             <Connector>
               <Component {...pageProps} />
             </Connector>
-          </Layout>
+          </LayoutVerticalSplit>
         </ConnectionProvider>
       </WebsocketProvider>
     </StoreProvider>

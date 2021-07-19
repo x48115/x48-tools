@@ -5,15 +5,6 @@ import { useRouter } from "next/router";
 import { useStore } from "../../components/StoreProvider/hooks";
 import { observer } from "mobx-react";
 import SubscriptionPane from "../../components/SubscriptionPane";
-import SubscriptionContent from "../../components/SubscriptionContent";
-import Logs from "../../components/Logs";
-
-const HorizontalWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 270px auto;
-  width: 100%;
-  height: 100%;
-`;
 
 const Input = styled.input`
   width: 100%;
@@ -29,6 +20,13 @@ const Bottom = styled.div`
   border-top: 1px solid #44f1a6;
 `;
 
+const HorizontalWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 270px auto;
+  width: 100%;
+  height: 100%;
+`;
+
 const VerticalWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -36,12 +34,12 @@ const VerticalWrapper = styled.div`
   grid-template-rows: auto 50px;
 `;
 
-const Redis = () => {
+export default observer(function HorizontalSplit(props) {
   const store = useStore();
   const websocket = store.websocket;
   const { asPath } = useRouter();
-  const nothingSelected = asPath == "/redis";
-  const selectedTopic = asPath.replace("/redis/", "");
+  const nothingSelected = asPath == "/firehose";
+  const selectedTopic = asPath.replace("/firehose/", "");
   const websocketConnected = store.websocketConnected;
 
   const initialize = () => {
@@ -49,7 +47,8 @@ const Redis = () => {
     if (nothingSelected) {
       subscriptionTopic = store.subscriptionTopics[0];
       if (subscriptionTopic) {
-        Router.push("/redis", `/redis/${subscriptionTopic}`, { shallow: true });
+        console.log("pamp it");
+        Router.push("/firehose", `/firehose/${subscriptionTopic}`);
       }
     } else {
       subscriptionTopic = selectedTopic;
@@ -67,13 +66,11 @@ const Redis = () => {
     <HorizontalWrapper>
       <SubscriptionPane />
       <VerticalWrapper>
-        <SubscriptionContent />
+        {props.children}
         <Bottom>
           <Input />
         </Bottom>
       </VerticalWrapper>
     </HorizontalWrapper>
   );
-};
-
-export default observer(Redis);
+});

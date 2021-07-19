@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import Logs from "../../components/Logs";
 import { useInitializeWebsocket } from "../../components/WebsocketProvider/hooks";
 import { useInitializeWeb3 } from "../../components/ConnectionProvider/hooks";
+import LayoutHorizontalSplit from "../../components/LayoutHorizontalSplit";
 
 const Wrapper = styled.div`
   color: #44f1a6;
@@ -45,7 +46,7 @@ const Connector = (props) => {
       content = <Logs />;
     }
   } else {
-    content = props.children;
+    content = <LayoutHorizontalSplit>{props.children}</LayoutHorizontalSplit>;
   }
   return (
     <Wrapper rootPage={rootPage} ready={ready}>
