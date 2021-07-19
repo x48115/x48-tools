@@ -20,6 +20,7 @@ const Button = styled.button`
     background-color: #44f1a6;
   }
   outline: none;
+  user-select: none;
 `;
 
 export default Button;

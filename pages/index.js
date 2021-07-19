@@ -36,7 +36,7 @@ const Home = () => {
   const ready = store.ready;
 
   const redirect = () => {
-    setTimeout(() => runMatrix(), 300);
+    setTimeout(() => runMatrix(), 150);
     Router.push("/redis");
   };
 

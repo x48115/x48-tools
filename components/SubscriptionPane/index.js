@@ -26,6 +26,7 @@ export default observer(() => {
       opacity: 1;
     }
     cursor: default;
+    user-select: none;
   `;
 
   const selectTopic = (subscriptionTopic) => {

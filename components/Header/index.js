@@ -49,8 +49,10 @@ export default observer(function Header() {
       <NavLinks>
         <BlockNumber>
           <BlockText>Block:&nbsp;</BlockText>
-          {store.blockNumber.toLocaleString("en-US")} (
-          {store.lastBlockTimestampDelta} seconds ago)
+          {store.blockNumber.toLocaleString("en-US")}
+          <BlockText>
+            &nbsp;({store.lastBlockTimestampDelta} seconds ago)
+          </BlockText>
         </BlockNumber>
         <ActiveLink href={`/gnosis`} activeClassName="active">
           Gnosis
