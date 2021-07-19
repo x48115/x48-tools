@@ -65,7 +65,7 @@ const Arrow = styled.div`
   transform: ${(props) => (props.expanded ? "rotate(90deg)" : "inherit")};
 `;
 
-export default observer(() => {
+const SubscriptionPane = () => {
   const store = useStore();
   const { asPath } = useRouter();
   const pathParts = asPath.split("/");
@@ -80,7 +80,7 @@ export default observer(() => {
 
   const selectChild = (root, child, itemIdx) => {
     store.setMenuSelection(root, child);
-    Router.push(`/${root}`, `/${root}/${child}`, { shallow: true });
+    Router.push(`/${root}`, `/${root}/${child}`);
     store.setCurrentTopic(root, child);
   };
 
@@ -140,4 +140,6 @@ export default observer(() => {
   const menu = renderMenu();
 
   return <Wrapper>{menu}</Wrapper>;
-});
+};
+
+export default observer(SubscriptionPane);

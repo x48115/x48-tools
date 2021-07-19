@@ -1,6 +1,6 @@
 import Router from "next/router";
 import { action, makeAutoObservable } from "mobx";
-import menuItems from "../components/subscriptionPane/menu.json";
+import menuItems from "../components/SubscriptionPane/menu.json";
 export default class Store {
   logs = [];
   websocketLogs = [];
@@ -44,13 +44,7 @@ export default class Store {
         if (rootMatch && childMatch) {
           returnIdx = idx + 1;
           const parentClosed = this.menuState[rootItem] !== true;
-          console.log(
-            "rootsies1",
-            parentClosed,
-            this.menuState[rootItem],
-            rootItem
-          );
-          if (true) {
+          if (parentClosed) {
             this.setMenuState(rootItem.root, true);
           }
           return false;
@@ -68,7 +62,7 @@ export default class Store {
   };
 
   setCurrentTopic = action((root, subscriptionTopic) => {
-    if (this.currentTopic != subscriptionTopic) {
+    if (this.currentTopic != subscriptionTopic && root === "firehose") {
       const previousTopic = this.currentTopic;
       this.currentTopic = subscriptionTopic;
       this.websocketLogs = [];
@@ -78,7 +72,8 @@ export default class Store {
         this.websocket.unsubscribe(previousTopic);
       }
       this.websocket.subscribe(subscriptionTopic);
-      Router.push(`/${root}`, `/${root}/${subscriptionTopic}`);
+    } else {
+      console.log("root isss", root);
     }
   });
 
@@ -114,6 +109,7 @@ export default class Store {
 
   checkSystemReady = () => {
     if (this.web3Connected && this.websocketConnected) {
+      this.log("[System] Initialization complete");
       this.ready = true;
     }
   };

@@ -38,27 +38,18 @@ export default observer(function HorizontalSplit(props) {
   const store = useStore();
   const websocket = store.websocket;
   const { asPath } = useRouter();
-  const nothingSelected = asPath == "/firehose";
-  const selectedTopic = asPath.replace("/firehose/", "");
-  const websocketConnected = store.websocketConnected;
+  const root = asPath.split("/")[1];
+  const page = asPath.split("/")[2];
 
   const initialize = () => {
-    let subscriptionTopic;
-    if (nothingSelected) {
-      subscriptionTopic = store.subscriptionTopics[0];
-      if (subscriptionTopic) {
-        console.log("pamp it");
-        Router.push("/firehose", `/firehose/${subscriptionTopic}`);
-      }
-    } else {
-      subscriptionTopic = selectedTopic;
-    }
     if (!store.currentTopic) {
-      store.setCurrentTopic(subscriptionTopic);
-      if (subscriptionTopic != "blockNumber") {
-        websocket.subscribe("blockNumber");
+      store.setCurrentTopic(root, page);
+      if (root === "firehose") {
+        if (page != "blockNumber") {
+          websocket.subscribe("blockNumber");
+          websocket.subscribe(page);
+        }
       }
-      websocket.subscribe(subscriptionTopic);
     }
   };
   useEffect(initialize, [store.subscriptionTopics]);

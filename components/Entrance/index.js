@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import Logo from "../components/Logo";
-import Button from "../components/Button";
-import Logs from "../components/Logs";
-import { useInitializeWebsocket } from "../components/WebsocketProvider/hooks";
-import { useInitializeWeb3 } from "../components/ConnectionProvider/hooks";
-import { useStore } from "../components/StoreProvider/hooks";
+import Logo from "../../components/Logo";
+import Button from "../../components/Button";
+import Logs from "../../components/Logs";
+import { useInitializeWebsocket } from "../../components/WebsocketProvider/hooks";
+import { useInitializeWeb3 } from "../../components/ConnectionProvider/hooks";
+import { useStore } from "../../components/StoreProvider/hooks";
 import { observer } from "mobx-react";
+import runMatrix from "../../utilities/matrix";
 
 const Wrapper = styled.div`
   margin-top: 30px;
@@ -31,7 +32,6 @@ const Home = () => {
 
   const initializeWebsocket = useInitializeWebsocket();
   const initializeWeb3 = useInitializeWeb3();
-  const ready = store.ready;
 
   const connect = () => {
     setConnecting(true);

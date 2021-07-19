@@ -4,9 +4,14 @@ import { useStore } from "../../components/StoreProvider/hooks";
 import { observer } from "mobx-react";
 import { useRouter } from "next/router";
 import Logs from "../../components/Logs";
+import Header from "../../components/Header";
+import LayoutVerticalSplit from "../../components/LayoutVerticalSplit";
+import Entrance from "../../components/Entrance";
 import { useInitializeWebsocket } from "../../components/WebsocketProvider/hooks";
 import { useInitializeWeb3 } from "../../components/ConnectionProvider/hooks";
 import LayoutHorizontalSplit from "../../components/LayoutHorizontalSplit";
+import runMatrix from "../../utilities/matrix";
+import Router from "next/router";
 
 const Wrapper = styled.div`
   color: #44f1a6;
@@ -26,13 +31,19 @@ const Connector = (props) => {
   const initializeWebsocket = useInitializeWebsocket();
   const initializeWeb3 = useInitializeWeb3();
 
+  const redirect = () => {
+    setTimeout(() => runMatrix(), 150);
+    Router.push("/firehose/transactionReceipts");
+  };
+
   const initialize = () => {
     if (!ready && !rootPage) {
       initializeWebsocket();
       initializeWeb3();
     }
-    if (ready && !rootPage) {
-      store.log("[System] Initialization complete");
+    if (ready && rootPage) {
+      store.log("[System] Redirecting...");
+      setTimeout(redirect, 300);
     }
   };
 
@@ -41,13 +52,21 @@ const Connector = (props) => {
   let content;
   if (!ready) {
     if (rootPage) {
-      content = props.children;
+      content = <Entrance />;
     } else {
       content = <Logs />;
     }
+  } else if (ready && !rootPage) {
+    content = (
+      <LayoutVerticalSplit>
+        <Header />
+        <LayoutHorizontalSplit>{props.children}</LayoutHorizontalSplit>
+      </LayoutVerticalSplit>
+    );
   } else {
-    content = <LayoutHorizontalSplit>{props.children}</LayoutHorizontalSplit>;
+    content = <Entrance />;
   }
+
   return (
     <Wrapper rootPage={rootPage} ready={ready}>
       {content}

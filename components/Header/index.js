@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import ActiveLink from "../ActiveLink";
 import { useDisplayName } from "../../components/ConnectionProvider/hooks";
 import { useStore } from "../../components/StoreProvider/hooks";
+import SearchInput from "../../components/SearchInput";
 import { useRouter } from "next/router";
 import { observer } from "mobx-react";
 
@@ -54,12 +54,7 @@ export default observer(function Header() {
             &nbsp;({store.lastBlockTimestampDelta} seconds ago)
           </BlockText>
         </BlockNumber>
-        <ActiveLink href={`/gnosis`} activeClassName="active">
-          Gnosis
-        </ActiveLink>
-        <ActiveLink href={`/firehose`} activeClassName="active">
-          Firehose
-        </ActiveLink>
+        <SearchInput />
         <Account>{displayName}</Account>
       </NavLinks>
     </Wrapper>

@@ -16,7 +16,7 @@ export default function ConnectionProvider({ children }) {
     setAccount(account);
     console.log("acct", account);
     const ens = new ENS({
-      provider: window.web3.currentProvider,
+      provider: window.ethereum,
       network: 1,
     });
     const accountEns = await ens.reverse(account).catch(() => {});
