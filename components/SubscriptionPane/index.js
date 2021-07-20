@@ -80,7 +80,7 @@ const SubscriptionPane = () => {
 
   const selectChild = (root, child, itemIdx) => {
     store.setMenuSelection(root, child);
-    Router.push(`/${root}`, `/${root}/${child}`);
+    Router.push(`/${root}/${child}`);
     store.setCurrentTopic(root, child);
   };
 
