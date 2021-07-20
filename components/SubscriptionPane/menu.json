@@ -23,6 +23,6 @@
     ]
   },
   { "root": "infrastructure", "children": ["nodes", "redis"] },
-  { "root": "simulations", "children": ["harvest"] },
+  { "root": "simulations", "children": ["harvest", "curve"] },
   { "root": "gnosis", "children": ["submit", "queue"] }
 ]
