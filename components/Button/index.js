@@ -6,7 +6,7 @@ const Button = styled.button`
   color: #44f1a6;
   border-radius: 5px;
   background-color: transparent;
-  display: flex;
+
   justify-content: center;
   > a {
     color: #44f1a6;

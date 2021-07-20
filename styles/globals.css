@@ -10,11 +10,16 @@ body {
   background-color: #272822;
 }
 
+label {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
 input {
   color: #3bf0a1;
   font-family: Menlo, Monaco, "Courier New", monospace;
   background-color: transparent;
-  border: 1px solid rgba(59, 240, 161, 0.8);
+  border: 1px solid rgba(59, 240, 161, 1);
   padding: 6px;
   outline: none;
 }

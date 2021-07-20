@@ -44,11 +44,9 @@ export default observer(function HorizontalSplit(props) {
   const initialize = () => {
     if (!store.currentTopic) {
       store.setCurrentTopic(root, page);
-      if (root === "firehose") {
-        if (page != "blockNumber") {
-          websocket.subscribe("blockNumber");
-          websocket.subscribe(page);
-        }
+      if (page != "blockNumber") {
+        websocket.subscribe("blockNumber");
+        websocket.subscribe(page);
       }
     }
   };

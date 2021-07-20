@@ -11,7 +11,6 @@ const Input = styled.input`
 
 const Wrapper = styled.div`
   position: relative;
-  display: none;
   width: 400px;
   height: 60px;
   top: 15px;
@@ -21,6 +20,7 @@ const Options = styled.div`
   background-color: #272822;
   width: 100%;
   position: relative;
+  display: none;
   top: -1px;
   border: 1px solid #3bf0a1;
   border-top: 0px;
