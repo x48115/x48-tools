@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useDisplayName } from "../../components/ConnectionProvider/hooks";
 import { useStore } from "../../components/StoreProvider/hooks";
-import SearchInput from "../../components/SearchInput";
 import { useRouter } from "next/router";
 import { observer } from "mobx-react";
 
@@ -11,31 +10,36 @@ const Wrapper = styled.div`
 `;
 
 const BlockNumber = styled.div`
-  position: absolute;
   display: flex;
   align-items: center;
-  left: 30px;
-  height: 59px;
+  padding-left: 30px;
 `;
 
 const NavLinks = styled.div`
   display: grid;
   grid-auto-flow: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   grid-gap: 12px;
 `;
 
 const Account = styled.div`
-  position: absolute;
+  width: 300px;
   display: flex;
   align-items: center;
-  right: 30px;
-  height: 59px;
+  justify-content: flex-end;
+  padding-right: 30px;
 `;
 
 const BlockText = styled.div`
   user-select: none;
+`;
+
+const Left = styled.div`
+  flex-direction: row;
+  grid-gap: 5px;
+  align-items: center;
+  display: flex;
 `;
 
 export default observer(function Header() {
@@ -47,14 +51,18 @@ export default observer(function Header() {
   return (
     <Wrapper rootPage={rootPage}>
       <NavLinks>
-        <BlockNumber>
-          <BlockText>Block:&nbsp;</BlockText>
-          {store.blockNumber.toLocaleString("en-US")}
-          <BlockText>
-            &nbsp;({store.lastBlockTimestampDelta} seconds ago)
-          </BlockText>
-        </BlockNumber>
-        <SearchInput />
+        <Left>
+          <BlockNumber>
+            <BlockText>Block:&nbsp;</BlockText>
+            {store.blockNumber}
+            <BlockText>
+              &nbsp;({String(store.lastBlockTimestampDelta).padStart(2, "0")}{" "}
+              seconds ago)
+            </BlockText>
+          </BlockNumber>
+          <div>|</div>
+          <div>Gas: {store.gasPrice}</div>
+        </Left>
         <Account>{displayName}</Account>
       </NavLinks>
     </Wrapper>

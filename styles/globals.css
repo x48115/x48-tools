@@ -3,7 +3,7 @@ body {
   padding: 0;
   margin: 0;
   font-size: 18px;
-  font-family: Menlo, Monaco, "Courier New", monospace;
+  font-family: "Courier New", monospace;
   font-size: 14px;
   line-height: 20px;
   color: #3bf0a1;
@@ -15,31 +15,47 @@ label {
   margin-bottom: 5px;
 }
 
+table {
+  border-collapse: collapse;
+}
+
+td {
+  padding: 10px;
+  border: 1px solid #3bf0a1;
+  vertical-align: top;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 input {
   color: #3bf0a1;
-  font-family: Menlo, Monaco, "Courier New", monospace;
   background-color: transparent;
   border: 1px solid rgba(59, 240, 161, 1);
   padding: 6px;
   outline: none;
 }
 
+option,
+pre,
+input {
+  font-family: "Courier New", monospace;
+}
+
 a {
-  color: white;
-  text-decoration: none;
-}
-
-a:visited {
-  color: white;
-  text-decoration: none;
-}
-
-a,
-a:hover,
-a:active,
-a:visited {
-  color: white;
-  text-decoration: none;
+  color: #44f1a6;
+  text-decoration: underline;
 }
 
 div.h {
@@ -69,7 +85,7 @@ canvas {
   margin: 0 auto;
   color: #3bf0a1;
   font-size: 50px;
-  font-family: Menlo, Monaco, "Courier New", monospace;
+  font-family: "Courier New", monospace;
   font-weight: 600;
   text-align: center;
   text-transform: uppercase;

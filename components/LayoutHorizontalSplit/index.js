@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Router from "next/router";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useStore } from "../../components/StoreProvider/hooks";
@@ -22,7 +21,8 @@ const Bottom = styled.div`
 
 const HorizontalWrapper = styled.div`
   display: grid;
-  grid-template-columns: 270px auto;
+  grid-template-columns: 230px auto;
+  overflow: hidden;
   width: 100%;
   height: 100%;
 `;
@@ -45,8 +45,12 @@ export default observer(function HorizontalSplit(props) {
     if (!store.currentTopic) {
       store.setCurrentTopic(root, page);
       if (page != "blockNumber") {
+        websocket.psubscribe(`${page}*`);
         websocket.subscribe("blockNumber");
-        websocket.subscribe(page);
+      }
+      if (page != "gasPrice") {
+        websocket.psubscribe(`${page}*`);
+        websocket.subscribe("gasPrice");
       }
     }
   };

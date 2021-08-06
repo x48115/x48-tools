@@ -11,14 +11,14 @@ export default function ConnectionProvider({ children }) {
   const [account, setAccount] = useState();
   const [displayName, setDisplayName] = useState();
   const store = useStore();
+  const ens = new ENS({
+    provider: window.ethereum,
+    network: 1,
+  });
 
   const updateAccount = async (account) => {
     setAccount(account);
     console.log("acct", account);
-    const ens = new ENS({
-      provider: window.ethereum,
-      network: 1,
-    });
     const accountEns = await ens.reverse(account).catch(() => {});
     const logInName = accountEns || account;
     if (logInName) {
@@ -31,6 +31,7 @@ export default function ConnectionProvider({ children }) {
     ethereum.request({ method: "eth_requestAccounts" });
     const web3Instance = new Web3(Web3.givenProvider);
     setWeb3(web3Instance);
+    store.setWeb3(web3Instance);
     setAccount(ethereum.selectedAddress);
     ethereum.on("chainChanged", (chainId) => {
       console.log("Updated chain id");
@@ -45,9 +46,12 @@ export default function ConnectionProvider({ children }) {
     });
   };
 
-  const setConnectionStatus = () => {
+  const setConnectionStatus = async () => {
     if (displayName) {
       store.log(`[Web3] Connected: ${displayName}`);
+      let ychadAddress = await ens.lookup("ychad.eth");
+      ychadAddress = web3.utils.toChecksumAddress(ychadAddress);
+      store.setYchadAddress(ychadAddress);
       store.setWeb3Connected(true);
     }
   };

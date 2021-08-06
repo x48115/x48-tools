@@ -34,6 +34,41 @@ export default function WebsocketProvider({ children }) {
           break;
         case "subscriptionTopics":
           store.setSubscriptionTopics(parsedData.payload);
+          break;
+        case "gnosis":
+          switch (topic) {
+            case "transactionsList":
+              const transactions = parsedData.payload;
+              store.setGnosisTransactions(transactions);
+              break;
+            case "transaction":
+              const transaction = parsedData.payload;
+              store.setCurrentGnosisTransaction(transaction);
+              break;
+            case "simulation":
+              const simulation = parsedData.payload;
+              store.setCurrentGnosisSimulation(simulation);
+              break;
+            case "owners":
+              const owners = parsedData.payload;
+              store.setCurrentGnosisOwners(owners);
+              break;
+          }
+        case "default":
+          break;
+      }
+      // TODO: Clean up!!
+      console.log("waooo", topic);
+      if (
+        topic &&
+        topic.startsWith("gnosis:transactions:") &&
+        !topic.endsWith("simulation")
+      ) {
+        console.log("it start");
+        store.prependGnosisTransaction(payload);
+      } else if (topic && topic.endsWith("simulation")) {
+        console.log("it end");
+        store.setCurrentGnosisSimulation(payload);
       }
 
       let blockNumber;
@@ -42,9 +77,14 @@ export default function WebsocketProvider({ children }) {
         store.setCurrentBlockNumber(blockNumber);
       }
 
+      if (topic == "gasPrice") {
+        const gasPrice = payload.gasPrice;
+        store.setGasPrice(gasPrice);
+      }
+
       const hideMessage =
         (blockNumber && store.currentTopic != "blockNumber") ||
-        parsedData.topic !== store.currentTopic;
+        (parsedData.topic && !parsedData.topic.startsWith(store.currentTopic));
       if (!hideMessage) {
         store.websocketLog(JSON.stringify(parsedData));
       }
@@ -57,12 +97,34 @@ export default function WebsocketProvider({ children }) {
       });
     };
 
+    wss.gnosis = (topic, payload) => {
+      wss.sendMessage({
+        action: "gnosis",
+        topic,
+        payload,
+      });
+    };
+
+    wss.psubscribe = (topic) => {
+      wss.sendMessage({
+        action: "psubscribe",
+        topic,
+      });
+    };
+
     wss.unsubscribe = (topic) => {
-      if (topic == "blockNumber") {
+      wss.sendMessage({
+        action: "unsubscribe",
+        topic,
+      });
+    };
+
+    wss.punsubscribe = (topic) => {
+      if (topic == "blockNumber*") {
         return;
       }
       wss.sendMessage({
-        action: "unsubscribe",
+        action: "punsubscribe",
         topic,
       });
     };

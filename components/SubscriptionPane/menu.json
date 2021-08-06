@@ -6,7 +6,8 @@
       "contracts",
       "gasPrice",
       "blockNumber",
-      "pendingTransactions"
+      "pendingTransactions",
+      "gnosis"
     ]
   },
   {
@@ -17,6 +18,7 @@
       "events",
       "simulations",
       "infrastructure",
+      "curve",
       "website",
       "reminders",
       "gnosis"

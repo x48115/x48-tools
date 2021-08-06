@@ -9,6 +9,8 @@ import menuItems from "./menu.json";
 const Wrapper = styled.div`
   border-right: 1px solid #44f1a6;
   padding: 30px 0px;
+  overflow-y: scroll;
+  font-size: 15px;
 `;
 
 const RootItem = styled.div`
@@ -71,7 +73,10 @@ const SubscriptionPane = () => {
   const pathParts = asPath.split("/");
   pathParts.shift();
   const pathRoot = pathParts[0];
-  const selectedTopic = pathParts[1];
+  let selectedTopic = pathParts[pathParts.length - 1];
+  if (pathRoot === "gnosis") {
+    selectedTopic = pathParts[2];
+  }
 
   const initializeMenu = () => {
     store.setMenuSelection(pathRoot, selectedTopic);
@@ -80,7 +85,11 @@ const SubscriptionPane = () => {
 
   const selectChild = (root, child, itemIdx) => {
     store.setMenuSelection(root, child);
-    Router.push(`/${root}/${child}`);
+    if (root === "gnosis") {
+      Router.push(`/${root}/${store.ychadAddress}/${child}`);
+    } else {
+      Router.push(`/${root}/${child}`);
+    }
     store.setCurrentTopic(root, child);
   };
 

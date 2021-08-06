@@ -13,7 +13,7 @@ const StyledButton = styled(Button)`
   width: 200px;
 `;
 
-const AuthenticateButton = () => {
+const AuthenticateButton = ({ className }) => {
   const store = useStore();
   const websocket = store.websocket;
   const displayName = useDisplayName();
@@ -58,7 +58,11 @@ const AuthenticateButton = () => {
     );
   };
 
-  return <StyledButton onClick={authenticate}>Authenticate</StyledButton>;
+  return (
+    <StyledButton className={className} onClick={authenticate}>
+      Sign
+    </StyledButton>
+  );
 };
 
 export default AuthenticateButton;

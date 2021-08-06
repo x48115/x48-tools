@@ -19,6 +19,14 @@ const Button = styled.button`
     color: #000;
     background-color: #44f1a6;
   }
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    &:hover {
+      background-color: transparent;
+      color: #44f1a6;
+    }
+  }
   outline: none;
   user-select: none;
 `;

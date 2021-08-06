@@ -9,6 +9,9 @@ export function isAddress(value) {
 }
 
 export function shortenAddress(address, chars) {
+  if (!address) {
+    return "";
+  }
   if (address.endsWith(".eth")) {
     return address;
   }
@@ -16,11 +19,7 @@ export function shortenAddress(address, chars) {
   if (!chars) {
     chars = 4;
   }
-
-  const parsed = isAddress(address);
-  if (!parsed) {
-    throw Error(`Invalid 'address' parameter '${address}'.`);
-  }
-  console.log("xxx");
-  return `${parsed.substring(0, chars + 2)}...${parsed.substring(42 - chars)}`;
+  return `${address.substring(0, chars + 2)}...${address.substring(
+    address.length - chars
+  )}`;
 }

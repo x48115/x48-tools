@@ -1,25 +1,49 @@
 import Router from "next/router";
 import { action, makeAutoObservable } from "mobx";
 import menuItems from "../components/SubscriptionPane/menu.json";
+
 export default class Store {
   logs = [];
   websocketLogs = [];
+  gnosisTransactions = [];
+  currentGnosisOwners = [];
+  web3 = {};
+  currentGnosisTransaction = {
+    sender: {},
+    addresses: [],
+  };
+  currentGnosisSimulation = {
+    contracts: [],
+    transaction: {
+      transaction_info: { logs: [] },
+      gas_used: 0,
+    },
+    simulation: {},
+    transferLogs: [],
+  };
   web3Connected = false;
   websocketConnected = false;
   ready = false;
   menuState = JSON.parse(localStorage.getItem("menuState")) || {};
   websocket;
+  simulationPending = true;
   subscriptionTopics = [];
   currentTopic;
   blockNumber = 0;
+  gasPrice = 0;
   lastBlockTimestamp = Date.now();
   currentTimestamp = Date.now();
   lastBlockTimestampDelta = 0;
   selectedMenuIdx = -1;
+  ychadAddress = "";
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  setWeb3 = (web3) => {
+    this.web3 = web3;
+  };
 
   setWeb3Connected = (status) => {
     this.web3Connected = true;
@@ -28,6 +52,54 @@ export default class Store {
 
   setWebsocket = (websocket) => {
     this.websocket = websocket;
+  };
+
+  setYchadAddress = (ychadAddress) => {
+    this.ychadAddress = ychadAddress;
+  };
+
+  setCurrentGnosisTransaction = (transaction) => {
+    this.currentGnosisTransaction = transaction;
+  };
+
+  setCurrentGnosisSimulation = (simulation) => {
+    if (!simulation) {
+      this.simulationPending = true;
+      return;
+    }
+    const logs = simulation.transaction.transaction_info.logs || [];
+    const transferHash =
+      "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+    const tokens = simulation.contracts.reduce((acc, contract) => {
+      if (contract.standard === "erc20") {
+        acc[contract.address] = contract.token_data;
+      }
+      return acc;
+    }, {});
+
+    const transferLogs = logs
+      .filter((log) => log.raw.topics[0] === transferHash)
+      .map((log) => ({ ...log, tokenData: tokens[log.raw.address] }))
+      .filter((log) => log.tokenData)
+      .map((log) => {
+        const amount = log.inputs[2].value / 10 ** log.tokenData.decimals;
+        const from = this.web3.utils.toChecksumAddress(log.inputs[0].value);
+        const to = this.web3.utils.toChecksumAddress(log.inputs[1].value);
+        const tokenAddress = log.raw.address;
+        const tokenData = { ...log.tokenData, address: tokenAddress };
+        return { ...log, tokenData, amount, from, to };
+      });
+    simulation.transferLogs = transferLogs;
+    this.currentGnosisSimulation = simulation;
+    this.simulationPending = false;
+  };
+
+  setSimulationPending() {
+    this.simulationPending = true;
+  }
+
+  setCurrentGnosisOwners = (owners) => {
+    this.currentGnosisOwners = owners;
   };
 
   setMenuSelection = action((root, child) => {
@@ -56,6 +128,14 @@ export default class Store {
     this.selectedMenuIdx = returnIdx;
   });
 
+  prependGnosisTransaction = (transaction) => {
+    this.gnosisTransactions.unshift(transaction);
+  };
+
+  setGnosisTransactions = (transactions) => {
+    this.gnosisTransactions = transactions;
+  };
+
   setWebsocketConnected = (status) => {
     this.websocketConnected = true;
     this.checkSystemReady();
@@ -69,11 +149,9 @@ export default class Store {
       if (this.currentTopic == "pendingTransactions") {
       }
       if (previousTopic) {
-        this.websocket.unsubscribe(previousTopic);
+        this.websocket.punsubscribe(`${previousTopic}*`);
       }
-      this.websocket.subscribe(subscriptionTopic);
-    } else {
-      console.log("root isss", root);
+      this.websocket.psubscribe(`${subscriptionTopic}*`);
     }
   });
 
@@ -84,6 +162,10 @@ export default class Store {
   setCurrentBlockNumber = (blockNumber) => {
     this.blockNumber = blockNumber;
     this.lastBlockTimestamp = Date.now();
+  };
+
+  setGasPrice = (gasPrice) => {
+    this.gasPrice = gasPrice;
   };
 
   toggleMenuState = action((key) => {
