@@ -58,16 +58,13 @@ export default function WebsocketProvider({ children }) {
           break;
       }
       // TODO: Clean up!!
-      console.log("waooo", topic);
       if (
         topic &&
         topic.startsWith("gnosis:transactions:") &&
         !topic.endsWith("simulation")
       ) {
-        console.log("it start");
         store.prependGnosisTransaction(payload);
       } else if (topic && topic.endsWith("simulation")) {
-        console.log("it end");
         store.setCurrentGnosisSimulation(payload);
       }
 
