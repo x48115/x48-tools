@@ -225,7 +225,6 @@ export default class Store {
   });
 
   websocketLog = action((topic, message) => {
-    console.log("topic", topic);
     let queueLength;
     const currentTopic = topic;
     switch (currentTopic) {

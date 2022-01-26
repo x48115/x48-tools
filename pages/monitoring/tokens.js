@@ -47,7 +47,13 @@ export default observer(() => {
     return (
       <tr key={token.address}>
         <TdRight>
-          {warning} {token.address}
+          {warning}{" "}
+          <a
+            href={`https://etherscan.io/address/${token.address}#readContract`}
+            target="_blank"
+          >
+            {token.address}
+          </a>
         </TdRight>
         <td>{token.symbol}</td>
         <td>{token.gasUsed}</td>
