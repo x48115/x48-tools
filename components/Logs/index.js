@@ -8,6 +8,7 @@ const Log = styled.div``;
 const Wrapper = styled.div`
   color: #44f1a6;
   width: 550px;
+  margin-top: 200px;
 `;
 
 const renderLog = (log, idx) => <Log key={idx}>{log}</Log>;

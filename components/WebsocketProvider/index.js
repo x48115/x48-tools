@@ -82,12 +82,7 @@ export default function WebsocketProvider({ children }) {
         store.setGasPrice(gasPrice);
       }
 
-      const hideMessage =
-        (blockNumber && store.currentTopic != "blockNumber") ||
-        (parsedData.topic && !parsedData.topic.startsWith(store.currentTopic));
-      if (!hideMessage) {
-        store.websocketLog(JSON.stringify(parsedData));
-      }
+      store.websocketLog(topic, JSON.stringify(parsedData));
     };
 
     wss.subscribe = (topic) => {
@@ -131,7 +126,6 @@ export default function WebsocketProvider({ children }) {
 
     wss.sendMessage = (message) => {
       const jsonMessage = JSON.stringify(message);
-      store.websocketLog(jsonMessage);
       wss.send(jsonMessage);
     };
 

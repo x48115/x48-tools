@@ -33,10 +33,19 @@ function SubscriptionContent() {
     );
   };
   const store = useStore();
-  const logs = store.websocketLogs && store.websocketLogs.map(renderLog);
+  const logs =
+    store.currentTopic &&
+    store.websocketLogs &&
+    store.websocketLogs[store.currentTopic].map(renderLog);
 
   const pendingTransactions = store.currentTopic === "pendingTransactions";
 
+  let content;
+  if (logs && logs.length) {
+    content = logs;
+  } else {
+    content = <div>Waiting for new data...</div>;
+  }
   useEffect(() => {
     if (!pendingTransactions) {
       const logWindow = document.getElementById("log-window");
@@ -44,7 +53,7 @@ function SubscriptionContent() {
     }
   }, [logs]);
 
-  return <Wrapper id="log-window">{logs}</Wrapper>;
+  return <Wrapper id="log-window">{content}</Wrapper>;
 }
 
 export default observer(SubscriptionContent);

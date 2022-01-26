@@ -35,12 +35,12 @@ export default observer(() => {
   }
   const loading = store.tokens.tokens.length == 0;
   if (loading) {
-    return <Loading>Loading...</Loading>;
+    return <Loading>Simulating gas usage and oracle queries...</Loading>;
   }
 
   const tokensRows = store.tokens.tokens.map((token) => {
     return (
-      <tr>
+      <tr key={token.address}>
         <td>{token.address}</td>
         <td>{token.symbol}</td>
         <td>{token.gasUsed}</td>
@@ -52,10 +52,12 @@ export default observer(() => {
   const tokensTable = (
     <Table>
       <thead>
-        <th>address</th>
-        <th>symbol</th>
-        <th>gas</th>
-        <th>price</th>
+        <tr>
+          <th>address</th>
+          <th>symbol</th>
+          <th>gas</th>
+          <th>price</th>
+        </tr>
       </thead>
       <tbody>{tokensRows}</tbody>
     </Table>

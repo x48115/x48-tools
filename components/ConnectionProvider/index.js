@@ -24,7 +24,7 @@ export default function ConnectionProvider({ children }) {
     if (store.web3) {
       const connected = await store.web3.eth.net.isListening();
       if (connected) {
-        store.web3Connected = true;
+        store.setWeb3Connected();
       }
     }
   };

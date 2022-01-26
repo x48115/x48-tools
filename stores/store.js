@@ -4,7 +4,7 @@ import menuItems from "../components/SubscriptionPane/menu.json";
 
 export default class Store {
   logs = [];
-  websocketLogs = [];
+  websocketLogs = {};
   gnosisTransactions = [];
   currentGnosisOwners = [];
   web3 = {};
@@ -149,16 +149,11 @@ export default class Store {
   };
 
   setCurrentTopic = action((root, subscriptionTopic) => {
-    if (this.currentTopic != subscriptionTopic && root === "firehose") {
-      const previousTopic = this.currentTopic;
-      this.currentTopic = subscriptionTopic;
-      this.websocketLogs = [];
-      if (this.currentTopic == "pendingTransactions") {
-      }
-      if (previousTopic) {
-        this.websocket.punsubscribe(`${previousTopic}*`);
-      }
-      this.websocket.psubscribe(`${subscriptionTopic}*`);
+    this.currentTopic = subscriptionTopic;
+    const noLogs = this.websocketLogs[subscriptionTopic] == undefined;
+    if (noLogs) {
+      console.log("init logss");
+      this.websocketLogs[subscriptionTopic] = [];
     }
   });
 
@@ -211,9 +206,11 @@ export default class Store {
     this.websocketLogs = [];
   });
 
-  websocketLog = action((message) => {
+  websocketLog = action((topic, message) => {
+    console.log("topic", topic);
     let queueLength;
-    switch (this.currentTopic) {
+    const currentTopic = topic;
+    switch (currentTopic) {
       case "transactionReceipts":
         queueLength = 3;
         break;
@@ -223,9 +220,18 @@ export default class Store {
       default:
         queueLength = 10;
     }
-    if (this.websocketLogs.length >= queueLength) {
-      this.websocketLogs.shift();
+    const notSet = this.websocketLogs[currentTopic] == undefined;
+    if (notSet) {
+      this.websocketLogs[currentTopic] = [message];
+      return;
     }
-    this.websocketLogs.push(message);
+    if (
+      currentTopic &&
+      this.websocketLogs[currentTopic].length >= queueLength
+    ) {
+      this.websocketLogs[currentTopic].shift();
+    }
+
+    this.websocketLogs[currentTopic].push(message);
   });
 }

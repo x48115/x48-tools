@@ -43,16 +43,11 @@ export default observer(function HorizontalSplit(props) {
   const page = asPath.split("/")[2];
 
   const initialize = () => {
-    if (!store.currentTopic) {
-      store.setCurrentTopic(root, page);
-      if (page != "blockNumber") {
-        websocket.subscribe("blockNumber");
-      }
-      if (page != "gasPrice") {
-        websocket.subscribe("gasPrice");
-      }
-      websocket.psubscribe(`${page}*`);
-    }
+    websocket.psubscribe(`tokens*`);
+    websocket.psubscribe(`contracts*`);
+    websocket.psubscribe(`blockNumber*`);
+    websocket.psubscribe(`transactionReceipts*`);
+    websocket.psubscribe(`gasPrice*`);
   };
   useEffect(initialize, [store.subscriptionTopics]);
   return (
