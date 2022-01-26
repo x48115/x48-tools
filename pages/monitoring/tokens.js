@@ -28,6 +28,11 @@ const Header = styled.div`
   justify-content: space-between;
 `;
 
+const SimulationId = styled.td`
+  max-width: 150px;
+  text-overflow: ellipsis;
+`;
+
 export default observer(() => {
   const store = useStore();
   const lastUpdate = store.tokens.timestamp || store.currentTimestamp;
@@ -58,6 +63,14 @@ export default observer(() => {
         <td>{token.symbol}</td>
         <td>{token.gasUsed}</td>
         <TdRight>{token.price}</TdRight>
+        <SimulationId>
+          <a
+            href={`https://dashboard.tenderly.co/yearn/yearn-web/simulator/${token.simulationId}`}
+            target="_blank"
+          >
+            {token.simulationId}
+          </a>
+        </SimulationId>
       </tr>
     );
   });
@@ -75,6 +88,7 @@ export default observer(() => {
           <th>symbol</th>
           <th>gas</th>
           <th>price</th>
+          <th>simulation</th>
         </tr>
       </thead>
       <tbody>{tokensRows}</tbody>
