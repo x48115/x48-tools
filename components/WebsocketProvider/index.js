@@ -35,6 +35,9 @@ export default function WebsocketProvider({ children }) {
         case "subscriptionTopics":
           store.setSubscriptionTopics(parsedData.payload);
           break;
+        case "tokens":
+          store.setTokens(parsedData.payload);
+          break;
         case "gnosis":
           switch (topic) {
             case "transactionsList":

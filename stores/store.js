@@ -8,6 +8,9 @@ export default class Store {
   gnosisTransactions = [];
   currentGnosisOwners = [];
   web3 = {};
+  tokens = {
+    tokens: [],
+  };
   currentGnosisTransaction = {
     sender: {},
     addresses: [],
@@ -60,6 +63,10 @@ export default class Store {
 
   setCurrentGnosisTransaction = (transaction) => {
     this.currentGnosisTransaction = transaction;
+  };
+
+  setTokens = (payload) => {
+    this.tokens = payload;
   };
 
   setCurrentGnosisSimulation = (simulation) => {

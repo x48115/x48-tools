@@ -32,6 +32,7 @@ const VerticalWrapper = styled.div`
   height: 100%;
   display: grid;
   grid-template-rows: auto 50px;
+  overflow: scroll;
 `;
 
 export default observer(function HorizontalSplit(props) {
@@ -45,13 +46,12 @@ export default observer(function HorizontalSplit(props) {
     if (!store.currentTopic) {
       store.setCurrentTopic(root, page);
       if (page != "blockNumber") {
-        websocket.psubscribe(`${page}*`);
         websocket.subscribe("blockNumber");
       }
       if (page != "gasPrice") {
-        websocket.psubscribe(`${page}*`);
         websocket.subscribe("gasPrice");
       }
+      websocket.psubscribe(`${page}*`);
     }
   };
   useEffect(initialize, [store.subscriptionTopics]);

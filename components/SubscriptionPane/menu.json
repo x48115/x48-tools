@@ -10,21 +10,5 @@
       "gnosis"
     ]
   },
-  {
-    "root": "notifications",
-    "children": [
-      "all",
-      "contracts",
-      "events",
-      "simulations",
-      "infrastructure",
-      "curve",
-      "website",
-      "reminders",
-      "gnosis"
-    ]
-  },
-  { "root": "infrastructure", "children": ["nodes", "redis"] },
-  { "root": "simulations", "children": ["harvest", "curve"] },
-  { "root": "gnosis", "children": ["submit", "queue"] }
+  { "root": "monitoring", "children": ["tokens"] }
 ]
