@@ -25,31 +25,7 @@ const ButtonWrapper = styled.div`
 `;
 
 const Home = () => {
-  const [connecting, setConnecting] = useState(false);
-  let content;
-  const store = useStore();
-
-  const initializeWebsocket = useInitializeWebsocket();
-  const initializeWeb3 = useInitializeWeb3();
-  const ready = store.ready;
-
-  const connect = () => {
-    setConnecting(true);
-    store.log("[System] Initializing...");
-    initializeWebsocket();
-    initializeWeb3();
-  };
-  if (connecting) {
-    content = <Logs />;
-  } else {
-    content = <StyledButton onClick={() => connect()}>Connect</StyledButton>;
-  }
-  return (
-    <Wrapper>
-      <Logo />
-      <ButtonWrapper>{content}</ButtonWrapper>
-    </Wrapper>
-  );
+  return <Wrapper></Wrapper>;
 };
 
 export default observer(Home);

@@ -2,69 +2,40 @@ import { useEffect, useState } from "react";
 import ConnectionContext from "./context";
 import Web3 from "web3";
 import ENS from "ethjs-ens";
-import { shortenAddress } from "../../utilities/address";
 import { useStore } from "../../components/StoreProvider/hooks";
 
 export default function ConnectionProvider({ children }) {
-  const [web3, setWeb3] = useState(null);
   const [chain, setChain] = useState("");
-  const [account, setAccount] = useState();
-  const [displayName, setDisplayName] = useState();
   const store = useStore();
   const ens = new ENS({
     provider: window.ethereum,
     network: 1,
   });
 
-  const updateAccount = async (account) => {
-    setAccount(account);
-    console.log("acct", account);
-    const accountEns = await ens.reverse(account).catch(() => {});
-    const logInName = accountEns || account;
-    if (logInName) {
-      setDisplayName(shortenAddress(logInName));
-    }
-  };
-
   const initialize = () => {
     store.log("[Web3] Connecting...");
-    ethereum.request({ method: "eth_requestAccounts" });
-    const web3Instance = new Web3(Web3.givenProvider);
-    setWeb3(web3Instance);
+    const web3Instance = new Web3(
+      "https://eth-mainnet.alchemyapi.io/v2/wfwULZWU8S-FYtQxxeqweGGS7eG6hh5N"
+    );
     store.setWeb3(web3Instance);
-    setAccount(ethereum.selectedAddress);
-    ethereum.on("chainChanged", (chainId) => {
-      console.log("Updated chain id");
-    });
-
-    ethereum.on("accountsChanged", (accounts) => {
-      updateAccount(accounts[0]);
-    });
-
-    web3Instance.eth.getAccounts().then(async (accounts) => {
-      updateAccount(accounts[0]);
-    });
   };
 
   const setConnectionStatus = async () => {
-    if (displayName) {
-      store.log(`[Web3] Connected: ${displayName}`);
-      let ychadAddress = await ens.lookup("ychad.eth");
-      ychadAddress = web3.utils.toChecksumAddress(ychadAddress);
-      store.setYchadAddress(ychadAddress);
-      store.setWeb3Connected(true);
+    if (store.web3) {
+      const connected = await store.web3.eth.net.isListening();
+      if (connected) {
+        store.web3Connected = true;
+      }
     }
   };
 
-  useEffect(setConnectionStatus, [displayName]);
+  useEffect(setConnectionStatus, [store.web3]);
 
   return (
     <ConnectionContext.Provider
       value={{
-        web3,
+        web3: store.web3,
         chain,
-        account,
-        displayName,
         initialize,
       }}
     >

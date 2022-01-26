@@ -30,6 +30,8 @@ td {
 
 th {
   text-align: left;
+  font-weight: 200;
+  text-transform: uppercase;
 }
 
 ul {

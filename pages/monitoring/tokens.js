@@ -20,6 +20,12 @@ const Table = styled.table`
   margin-bottom: 40px;
 `;
 
+const Td = styled.td`
+  &:last-of-type {
+    text-align: right;
+  }
+`;
+
 export default observer(() => {
   const store = useStore();
   const lastUpdate = store.tokens.timestamp || store.currentTimestamp;
@@ -38,7 +44,7 @@ export default observer(() => {
         <td>{token.address}</td>
         <td>{token.symbol}</td>
         <td>{token.gasUsed}</td>
-        <td>{token.price}</td>
+        <Td>{token.price}</Td>
       </tr>
     );
   });

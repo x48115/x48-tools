@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import Logs from "../../components/Logs";
 import Header from "../../components/Header";
 import LayoutVerticalSplit from "../../components/LayoutVerticalSplit";
-import Entrance from "../../components/Entrance";
 import { useInitializeWebsocket } from "../../components/WebsocketProvider/hooks";
 import { useInitializeWeb3 } from "../../components/ConnectionProvider/hooks";
 import LayoutHorizontalSplit from "../../components/LayoutHorizontalSplit";
@@ -37,11 +36,11 @@ const Connector = (props) => {
   };
 
   const initialize = () => {
-    if (!ready && !rootPage) {
+    store.log("[System] Connecting...");
+    if (!ready) {
       initializeWebsocket();
       initializeWeb3();
-    }
-    if (ready && rootPage) {
+    } else if (ready && rootPage) {
       store.log("[System] Redirecting...");
       setTimeout(redirect, 300);
     }
@@ -51,11 +50,7 @@ const Connector = (props) => {
 
   let content;
   if (!ready) {
-    if (rootPage) {
-      content = <Entrance />;
-    } else {
-      content = <Logs />;
-    }
+    content = <Logs />;
   } else if (ready && !rootPage) {
     content = (
       <LayoutVerticalSplit>
@@ -63,8 +58,6 @@ const Connector = (props) => {
         <LayoutHorizontalSplit>{props.children}</LayoutHorizontalSplit>
       </LayoutVerticalSplit>
     );
-  } else {
-    content = <Entrance />;
   }
 
   return (
