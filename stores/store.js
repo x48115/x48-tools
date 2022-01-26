@@ -66,6 +66,24 @@ export default class Store {
   };
 
   setTokens = (payload) => {
+    const tokensData = payload.tokens.map((token) => {
+      const newToken = token;
+      if (token.gasUsed > 5000000 || token.price == 0) {
+        newToken.warning = true;
+      } else {
+        newToken.warning = false;
+      }
+      return newToken;
+    });
+    const sortedTokens = Object.entries(tokensData)
+      .sort((a, b) => {
+        return b[1].warning - a[1].warning;
+      })
+      .map((token) => {
+        return token[1];
+      });
+    payload.tokens = sortedTokens;
+
     this.tokens = payload;
   };
 

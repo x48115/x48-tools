@@ -20,10 +20,12 @@ const Table = styled.table`
   margin-bottom: 40px;
 `;
 
-const Td = styled.td`
-  &:last-of-type {
-    text-align: right;
-  }
+const TdRight = styled.td`
+  text-align: right;
+`;
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 export default observer(() => {
@@ -38,16 +40,26 @@ export default observer(() => {
     return <Loading>Simulating gas usage and oracle queries...</Loading>;
   }
 
+  const problemTokens = store.tokens.tokens.filter((token) => token.warning);
+
   const tokensRows = store.tokens.tokens.map((token) => {
+    const warning = token.warning ? "❌" : "✅";
     return (
       <tr key={token.address}>
-        <td>{token.address}</td>
+        <TdRight>
+          {warning} {token.address}
+        </TdRight>
         <td>{token.symbol}</td>
         <td>{token.gasUsed}</td>
-        <Td>{token.price}</Td>
+        <TdRight>{token.price}</TdRight>
       </tr>
     );
   });
+
+  let problems;
+  if (problemTokens.length) {
+    problems = `⚠️ Found ${problemTokens.length} problems`;
+  }
 
   const tokensTable = (
     <Table>
@@ -64,7 +76,10 @@ export default observer(() => {
   );
   return (
     <Wrapper>
-      <div>updated: {updated} seconds ago</div>
+      <Header>
+        <div>{problems}</div>
+        <div>Updated: {updated} seconds ago</div>
+      </Header>
       {tokensTable}
     </Wrapper>
   );
